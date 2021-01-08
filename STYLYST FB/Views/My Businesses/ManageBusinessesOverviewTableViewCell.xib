@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="GlacialIndifference-Bold.otf">
+            <string>GlacialIndifference-Bold</string>
+        </array>
+        <array key="GlacialIndifference-Regular.otf">
+            <string>GlacialIndifference-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="manageBusinessesOverviewTableViewCell" rowHeight="416" id="KGk-i7-Jjw" customClass="ManageBusinessesOverviewTableViewCell" customModule="STYLYST_FB" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="380" height="416"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="380" height="416"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HT0-Zc-E6S" userLabel="Top Line">
+                        <rect key="frame" x="0.0" y="0.0" width="380" height="2"/>
+                        <color key="backgroundColor" name="GoldenThemeColorInverse"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="4tw-vg-2Ps"/>
+                        </constraints>
+                    </view>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Utv-fi-3Ac">
+                        <rect key="frame" x="17" y="22" width="346" height="247"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Business Name djfnjkdnfjkdnj" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="Sa7-Zp-FZz">
+                                <rect key="frame" x="0.0" y="0.0" width="346" height="82"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="90" id="JmP-sK-qNz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="GlacialIndifference-Bold" family="Glacial Indifference" pointSize="35"/>
+                                <color key="textColor" name="GoldenThemeColorDefault"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address: 123 Default St, City, Province, Postal Code" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Om-bw-GW0">
+                                <rect key="frame" x="0.0" y="97" width="346" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="rtU-Na-sWQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="GlacialIndifference-Regular" family="Glacial Indifference" pointSize="20"/>
+                                <color key="textColor" name="GoldenThemeColorInverse"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Business Type: None" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W54-0V-wax">
+                                <rect key="frame" x="0.0" y="142" width="346" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="zUi-2Z-rvt"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="GlacialIndifference-Regular" family="Glacial Indifference" pointSize="20"/>
+                                <color key="textColor" name="GoldenThemeColorInverse"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6Qa-20-Byj">
+                                <rect key="frame" x="5" y="187" width="336" height="60"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="E4H-KJ-teb">
+                                        <rect key="frame" x="0.0" y="1" width="59" height="57.5"/>
+                                        <color key="tintColor" name="GoldenThemeColorDefault"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Gwy-7Q-GUN">
+                                        <rect key="frame" x="69" y="1" width="59.5" height="57.5"/>
+                                        <color key="tintColor" name="GoldenThemeColorDefault"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="BWK-3b-4KQ">
+                                        <rect key="frame" x="138.5" y="1" width="59" height="57.5"/>
+                                        <color key="tintColor" name="GoldenThemeColorDefault"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="4Yv-gp-jp2">
+                                        <rect key="frame" x="207.5" y="1" width="59.5" height="57.5"/>
+                                        <color key="tintColor" name="GoldenThemeColorDefault"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="WbY-Uu-DzN">
+                                        <rect key="frame" x="277" y="1" width="59" height="57.5"/>
+                                        <color key="tintColor" name="GoldenThemeColorDefault"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="hRi-SG-dPx"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="6Qa-20-Byj" secondAttribute="bottom" id="SdE-hc-7jr"/>
+                            <constraint firstItem="6Qa-20-Byj" firstAttribute="leading" secondItem="Utv-fi-3Ac" secondAttribute="leading" constant="5" id="kNc-ze-8vU"/>
+                            <constraint firstAttribute="trailing" secondItem="6Qa-20-Byj" secondAttribute="trailing" constant="5" id="wez-yf-eNG"/>
+                        </constraints>
+                    </stackView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jeI-Ps-vTb" userLabel="Left Line">
+                        <rect key="frame" x="0.0" y="0.0" width="2" height="286"/>
+                        <color key="backgroundColor" name="GoldenThemeColorInverse"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="2" id="fau-5P-OKv"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Av-CE-iag" userLabel="Bottom Line">
+                        <rect key="frame" x="0.0" y="284" width="380" height="2"/>
+                        <color key="backgroundColor" name="GoldenThemeColorInverse"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="Nt6-Pb-ykZ"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bSb-xD-ieU" userLabel="Right Line">
+                        <rect key="frame" x="378" y="0.0" width="2" height="286"/>
+                        <color key="backgroundColor" name="GoldenThemeColorInverse"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="2" id="l7z-ze-B7Q"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="63n-jI-rG2">
+                        <rect key="frame" x="20" y="286" width="340" height="15"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="ZXM-gR-Cyb"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="5Av-CE-iag" firstAttribute="top" secondItem="Utv-fi-3Ac" secondAttribute="bottom" constant="15" id="1AX-rb-dNF"/>
+                    <constraint firstAttribute="trailing" secondItem="HT0-Zc-E6S" secondAttribute="trailing" id="2Fy-xZ-C2U"/>
+                    <constraint firstItem="bSb-xD-ieU" firstAttribute="leading" secondItem="Utv-fi-3Ac" secondAttribute="trailing" constant="15" id="5hm-9d-Zac"/>
+                    <constraint firstItem="HT0-Zc-E6S" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="9fB-3e-Q9m"/>
+                    <constraint firstItem="63n-jI-rG2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="F6K-GD-w7G"/>
+                    <constraint firstItem="5Av-CE-iag" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="GmO-gR-4qk"/>
+                    <constraint firstItem="bSb-xD-ieU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Hs7-KG-bdn"/>
+                    <constraint firstItem="HT0-Zc-E6S" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="J5Z-dN-Igp"/>
+                    <constraint firstAttribute="trailing" secondItem="5Av-CE-iag" secondAttribute="trailing" id="Ovh-Mh-Fab"/>
+                    <constraint firstItem="jeI-Ps-vTb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="TYf-X7-lPg"/>
+                    <constraint firstItem="Utv-fi-3Ac" firstAttribute="leading" secondItem="jeI-Ps-vTb" secondAttribute="trailing" constant="15" id="VUK-EH-ehp"/>
+                    <constraint firstAttribute="bottom" secondItem="5Av-CE-iag" secondAttribute="bottom" id="Xiv-oD-4j0"/>
+                    <constraint firstItem="63n-jI-rG2" firstAttribute="top" secondItem="5Av-CE-iag" secondAttribute="bottom" id="a5p-G9-fcm"/>
+                    <constraint firstItem="jeI-Ps-vTb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="aPr-gA-IvC"/>
+                    <constraint firstItem="Utv-fi-3Ac" firstAttribute="top" secondItem="HT0-Zc-E6S" secondAttribute="bottom" constant="20" id="cEe-lJ-a9D"/>
+                    <constraint firstAttribute="trailing" secondItem="bSb-xD-ieU" secondAttribute="trailing" id="fmr-n0-fYb"/>
+                    <constraint firstAttribute="bottom" secondItem="bSb-xD-ieU" secondAttribute="bottom" id="mYf-nH-Fwq"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="63n-jI-rG2" secondAttribute="trailing" id="pUe-ni-mEg"/>
+                    <constraint firstAttribute="bottom" secondItem="jeI-Ps-vTb" secondAttribute="bottom" id="y2l-xu-dgY"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="addressLabel" destination="0Om-bw-GW0" id="tLS-sc-xUn"/>
+                <outlet property="bottomLine" destination="5Av-CE-iag" id="jmf-82-3KJ"/>
+                <outlet property="businessNameLabel" destination="Sa7-Zp-FZz" id="8id-61-vHd"/>
+                <outlet property="businessTypeLabel" destination="W54-0V-wax" id="9Qz-sN-PGT"/>
+                <outlet property="img1" destination="E4H-KJ-teb" id="ab9-vp-mCe"/>
+                <outlet property="img2" destination="Gwy-7Q-GUN" id="61D-rn-FOq"/>
+                <outlet property="img3" destination="BWK-3b-4KQ" id="aGA-a7-1MO"/>
+                <outlet property="img4" destination="4Yv-gp-jp2" id="PAh-PV-LES"/>
+                <outlet property="img5" destination="WbY-Uu-DzN" id="zcf-VK-z6A"/>
+            </connections>
+            <point key="canvasLocation" x="153.62318840579712" y="287.27678571428572"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="photo" catalog="system" width="128" height="93"/>
+        <namedColor name="GoldenThemeColorDefault">
+            <color red="0.8970000147819519" green="0.8410000205039978" blue="0.72200000286102295" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="GoldenThemeColorInverse">
+            <color red="0.87400001287460327" green="0.7630000114440918" blue="0.5690000057220459" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

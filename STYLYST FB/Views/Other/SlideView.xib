@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="GlacialIndifference-Bold.otf">
+            <string>GlacialIndifference-Bold</string>
+        </array>
+        <array key="GlacialIndifference-Regular.otf">
+            <string>GlacialIndifference-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="Slide" customModule="STYLYST_FB" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label2" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="uPc-af-YRi">
+                    <rect key="frame" x="20" y="100" width="335" height="41"/>
+                    <fontDescription key="fontDescription" name="GlacialIndifference-Regular" family="Glacial Indifference" pointSize="35"/>
+                    <color key="textColor" name="GoldenThemeColorLight"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.logo" translatesAutoresizingMaskIntoConstraints="NO" id="pB4-1h-4ho">
+                    <rect key="frame" x="60" y="20" width="255" height="497"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="600" id="mJ8-lt-9Pb"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label1" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="il2-XK-CmJ">
+                    <rect key="frame" x="20" y="537" width="335" height="100"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="3Od-EV-0M5"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="yuz-8s-Alc"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="GlacialIndifference-Regular" family="Glacial Indifference" pointSize="30"/>
+                    <color key="textColor" name="GoldenThemeColorLight"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bR1-S9-ThH">
+                    <rect key="frame" x="50" y="557" width="275" height="60"/>
+                    <color key="backgroundColor" name="GoldenThemeColorLight"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="Cwq-Od-Vod"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="GlacialIndifference-Bold" family="Glacial Indifference" pointSize="35"/>
+                    <state key="normal" title="Button">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="3rd-mG-TrK"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="bR1-S9-ThH" secondAttribute="bottom" constant="50" id="AAQ-bH-ZbC"/>
+                <constraint firstItem="il2-XK-CmJ" firstAttribute="top" secondItem="pB4-1h-4ho" secondAttribute="bottom" constant="20" id="ARe-vO-k7G"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="pB4-1h-4ho" secondAttribute="trailing" constant="60" id="EA3-kZ-ybs"/>
+                <constraint firstItem="il2-XK-CmJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="KVw-J2-bpX"/>
+                <constraint firstItem="pB4-1h-4ho" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="60" id="KjX-fp-Oof"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="uPc-af-YRi" secondAttribute="trailing" constant="20" id="LzC-Fc-MZf"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bR1-S9-ThH" secondAttribute="trailing" constant="50" id="VSH-he-xyy"/>
+                <constraint firstItem="bR1-S9-ThH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="50" id="YkM-V2-F2M"/>
+                <constraint firstItem="pB4-1h-4ho" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="bBi-YP-as3"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="il2-XK-CmJ" secondAttribute="trailing" constant="20" id="i6d-Fz-mjN"/>
+                <constraint firstItem="uPc-af-YRi" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="qul-Yc-5Ic"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="il2-XK-CmJ" secondAttribute="bottom" constant="30" id="uAP-TY-iAy"/>
+                <constraint firstItem="uPc-af-YRi" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="100" id="wA3-qn-fTi"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="button" destination="bR1-S9-ThH" id="Y0U-6W-foI"/>
+                <outlet property="label1" destination="il2-XK-CmJ" id="MaZ-sA-q3Z"/>
+                <outlet property="label2" destination="uPc-af-YRi" id="ejY-rX-k66"/>
+                <outlet property="slideImage" destination="pB4-1h-4ho" id="iym-em-Q9b"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="153"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="background.logo" width="414" height="896"/>
+        <namedColor name="GoldenThemeColorLight">
+            <color red="0.89800000190734863" green="0.83899998664855957" blue="0.72200000286102295" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>
