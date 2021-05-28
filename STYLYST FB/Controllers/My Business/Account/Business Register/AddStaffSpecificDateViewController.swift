@@ -61,7 +61,6 @@ class AddStaffSpecificDateViewController: UIViewController {
 		textFields = [dateTextField, openTimeTextField1, closeTimeTextField1, openTimeTextField2, closeTimeTextField2]
 		for textField in textFields {
 			textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
@@ -156,7 +155,7 @@ class AddStaffSpecificDateViewController: UIViewController {
 						addRemoveShiftButton.setTitle("Add Second Shift", for: .normal)
 						addRemoveShiftButton.setTitleColor(.black, for: .normal)
 						hoursStackView2.alpha = 0
-						openTimePicker2?.setDate(from: "2000-1-1 9:00", format: K.Strings.dateAndTimeFormatString, animated: false)
+						openTimePicker2?.setDate(from: "2000-1-1 14:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 						closeTimePicker2?.setDate(from: "2000-1-1 17:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 						dateOrTimeUpdated(openTimePicker2!)
 						dateOrTimeUpdated(closeTimePicker2!)
@@ -203,8 +202,8 @@ class AddStaffSpecificDateViewController: UIViewController {
 	func setUpAsClosed() {
 		datePicker?.setDate(Date(), animated: false)
 		openTimePicker1?.setDate(from: "2000-1-1 9:00", format: K.Strings.dateAndTimeFormatString, animated: false)
-		closeTimePicker1?.setDate(from: "2000-1-1 17:00", format: K.Strings.dateAndTimeFormatString, animated: false)
-		openTimePicker2?.setDate(from: "2000-1-1 9:00", format: K.Strings.dateAndTimeFormatString, animated: false)
+		closeTimePicker1?.setDate(from: "2000-1-1 13:00", format: K.Strings.dateAndTimeFormatString, animated: false)
+		openTimePicker2?.setDate(from: "2000-1-1 14:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 		closeTimePicker2?.setDate(from: "2000-1-1 17:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 		dateOrTimeUpdated(datePicker!)
 		dateOrTimeUpdated(openTimePicker1!)

@@ -19,8 +19,6 @@ class HoursOfOperationViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		tableView.dataSource = self
-		tableView.delegate = self
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -39,7 +37,6 @@ class HoursOfOperationViewController: UIViewController {
 		navigationController?.makeTransparent()
 	}
 	
-	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.destination is WeekdayScheduleViewController {
 			let weekdayScheduleVC = segue.destination as! WeekdayScheduleViewController
@@ -50,6 +47,9 @@ class HoursOfOperationViewController: UIViewController {
 		}
 	}
 	
+	@IBAction func scheduleInfoPressed(_ sender: UIButton) {
+		Alerts.showNoOptionAlert(title: "Hours of Operation Info", message: "Hours specified here do not impact staff members' schedules or appointment booking. They are only used to display on your front page", sender: self)
+	}
 	
 	@IBAction func setSpecificDatesPressed(_ sender: UIButton) {
 		performSegue(withIdentifier: K.Segues.hoursOfOperationToSpecificDates, sender: self)

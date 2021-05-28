@@ -158,4 +158,16 @@ struct Helpers {
 		return openAndCloseTime
 	}
 	
+	
+	static func getNoDataLabel(forTableView tableView: UITableView, withText labelText: String) -> UILabel {
+		let tableWidth = tableView.bounds.size.width
+		let noDataLabel = UILabel(frame: CGRect(x: tableWidth * 0.075, y: 0, width: tableWidth * 0.85, height: tableView.bounds.size.height))
+		noDataLabel.numberOfLines = 0
+		noDataLabel.text = labelText
+		noDataLabel.textColor = K.Colors.goldenThemeColorDefault
+		noDataLabel.textAlignment = .center
+		noDataLabel.isHidden = true
+		return noDataLabel
+	}
+	
 }

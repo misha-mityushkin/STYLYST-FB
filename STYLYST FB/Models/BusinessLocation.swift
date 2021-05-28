@@ -33,7 +33,8 @@ class BusinessLocation {
     var introParagraph: String
 	var businessType: BusinessType
 	
-	var services: [[String : Any]]
+	var serviceCategories: [String]
+	var services: [Service]
 	
 	var staffUserIDs: [String]
 	var staffMembers: [User] = []
@@ -44,7 +45,7 @@ class BusinessLocation {
 	var specificHours: [String : String]?
 	var staffWeeklyHours: [String : [String : [String]]]?
 	var staffSpecificHours: [String : [String : [String]]]?
-    
+	
 
 	
 	init(docID: String, data: [String : Any]?, images: [UIImage?], placeholderImage: UIImage) {
@@ -65,7 +66,17 @@ class BusinessLocation {
 		
 		self.introParagraph = data?[K.Firebase.PlacesFieldNames.introParagraph] as? String ?? ""
 		self.staffUserIDs = data?[K.Firebase.PlacesFieldNames.staffUserIDs] as? [String] ?? []
-		self.services = data?[K.Firebase.PlacesFieldNames.services] as? [[String : Any]] ?? []
+		
+		self.serviceCategories = data?[K.Firebase.PlacesFieldNames.serviceCategories] as? [String] ?? []
+		if self.serviceCategories.isEmpty {
+			self.serviceCategories = [Service.NO_CATEGORY]
+		}
+		self.services = []
+		let servicesData = data?[K.Firebase.PlacesFieldNames.services] as? [[String : Any]] ?? []
+		for serviceData in servicesData {
+			self.services.append(Service(serviceData: serviceData))
+		}
+		
 		self.weeklyHours = data?[K.Firebase.PlacesFieldNames.weeklyHours] as? [String : String]
 		self.specificHours = data?[K.Firebase.PlacesFieldNames.specificHours] as? [String : String]
 		self.staffWeeklyHours = data?[K.Firebase.PlacesFieldNames.staffWeeklyHours] as? [String : [String : [String]]]

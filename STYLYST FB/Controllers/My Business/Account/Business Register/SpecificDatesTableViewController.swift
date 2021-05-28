@@ -23,14 +23,10 @@ class SpecificDatesTableViewController: UITableViewController {
 		super.viewDidLoad()
 		
 		specificDates = hoursOfOperationVC?.businessRegisterVC?.specificHours
-		specificDatesSortedArray = specificDates?.sorted(by: <)
+		updateSpecificDates()
 		
-		noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-		noDataLabel?.numberOfLines = 0
-		noDataLabel!.text = "No specific dates found. Tap the + icon in the top right corner to add one"
-		noDataLabel!.textColor = K.Colors.goldenThemeColorDefault
-		noDataLabel!.textAlignment = .center
-		noDataLabel!.isHidden = true
+		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No specific dates added yet. Tap the + icon in the top right corner to add one")
+		
 		tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
 		tableView.register(UINib(nibName: K.Nibs.specificDateCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.specificDateCellIdentifier)
 	}

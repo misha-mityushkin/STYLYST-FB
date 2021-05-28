@@ -21,7 +21,7 @@ class ChooseLocationViewController: UIViewController {
 	
 	var selectedLocation: MKMapItem?
 	var selectedLocationPin = MKPointAnnotation()
-    
+	    
     let regionMeters = 10000.0
         
     override func viewDidLoad() {
@@ -91,6 +91,11 @@ class ChooseLocationViewController: UIViewController {
 	func setLocation(location: MKMapItem) {
 		selectedLocation = location
 		selectedLocationPin.coordinate = location.placemark.coordinate
+//		if (businessRegisterVC?.isEditBusiness ?? false) && !(businessRegisterVC?.isNewLocation ?? false) && false {
+//			selectedLocationPin.title = businessRegisterVC?.businessLocation?.addressFormatted
+//		} else {
+//			selectedLocationPin.title = Helpers.parseAddress(for: location.placemark)
+//		}
 		selectedLocationPin.title = Helpers.parseAddress(for: location.placemark)
 		mapView.addAnnotation(selectedLocationPin)
 		mapView.setRegion(MKCoordinateRegion(center: location.placemark.coordinate, latitudinalMeters: regionMeters / 10, longitudinalMeters: regionMeters / 10), animated: true)
@@ -99,6 +104,7 @@ class ChooseLocationViewController: UIViewController {
 	
 	@IBAction func donePressed(_ sender: UIButton) {
 		if let location = selectedLocation {
+			print("setting business register location")
 			businessRegisterVC?.setLocation(location: location)
 			businessRegisterVC?.isNewLocation = true
 			navigationController?.popViewController(animated: true)

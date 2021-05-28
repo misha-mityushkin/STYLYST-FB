@@ -39,7 +39,6 @@ class WeekdayScheduleViewController: UIViewController {
 		textFields = [openTimeTextField, closeTimeTextField]
 		for textField in textFields {
 			textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		

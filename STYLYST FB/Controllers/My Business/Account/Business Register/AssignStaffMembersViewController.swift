@@ -26,23 +26,19 @@ class AssignStaffMembersViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		print("assign staff viewdidload")
+		
+		addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers.sort(by: { user1, user2 in
+			return user1.firstName < user2.firstName
+		})
 		
 		for staffMember in addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers ?? [] {
 			enabled.append(addServiceVC?.assignedStaff.contains(staffMember.userID) ?? false)
 		}
-		print(enabled)
-		noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-		noDataLabel?.numberOfLines = 0
-		noDataLabel!.text = "No staff members found. Go back, add all of your staff members, and assign them to the appropriate services"
-		noDataLabel!.textColor = K.Colors.goldenThemeColorDefault
-		noDataLabel!.textAlignment = .center
-		noDataLabel!.isHidden = true
-		tableView.delegate = self
-		tableView.dataSource = self
+		
+		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No staff members found. No worries, you can always assign to staff members after adding your services.")
+		
 		tableView.backgroundView = nil
 		tableView.register(UINib(nibName: K.Nibs.assignStaffCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.assignStaffCellIdentifier)
-		print("registered nib")
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

@@ -23,19 +23,14 @@ class AssignServicesViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
 		let staffMember = addStaffMemberVC?.staffMember
 		for service in addStaffMemberVC?.services ?? [] {
 			enabled.append(staffMemberIsCapableOfService(staffMember: staffMember, service: service))
 		}
-		print(enabled)
-		noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-		noDataLabel?.numberOfLines = 0
-		noDataLabel!.text = "No services found. You can add and assign services after adding all your staff members."
-		noDataLabel!.textColor = K.Colors.goldenThemeColorDefault
-		noDataLabel!.textAlignment = .center
-		noDataLabel!.isHidden = true
-		tableView.delegate = self
-		tableView.dataSource = self
+		
+		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No services found. No worries, you can always add and assign services after adding staff members.")
+		
 		tableView.backgroundView = nil
 		tableView.register(UINib(nibName: K.Nibs.assignServicesCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.assignServicesCellIdentifier)
 	}
@@ -69,27 +64,19 @@ class AssignServicesViewController: UIViewController {
 			for i in 0..<services.count {
 				
 				var service = services[i]
-				var staffMembersCapableOfService = service[K.Firebase.PlacesFieldNames.Services.staff] as? [String] ?? []
-				var specificTimes = service[K.Firebase.PlacesFieldNames.Services.specificTimes] as? [String : String]
-				var specificPrices = service[K.Firebase.PlacesFieldNames.Services.specificPrices] as? [String : Double]
-				let defaultTime = service[K.Firebase.PlacesFieldNames.Services.defaultTime] as? String ?? "0h 0min"
-				let defaultPrice = service[K.Firebase.PlacesFieldNames.Services.defaultPrice] as? Double ?? 0
+				var staffMembersCapableOfService = service.assignedStaff
+				var specificTimes = service.specificTimes
+				var specificPrices = service.specificPrices
+				let defaultTime = service.defaultTime
+				let defaultPrice = service.defaultPrice
 				
 				if self.enabled[i] { //if this service should be enabled for staff member
 					
 					if !self.staffMemberIsCapableOfService(staffMember: staffMember, service: service) { //if its not enabled
 						staffMembersCapableOfService.append(staffMember.userID)
 					}
-					if specificTimes == nil {
-						specificTimes = [staffMember.userID : defaultTime]
-					} else {
-						specificTimes![staffMember.userID] = defaultTime
-					}
-					if specificPrices == nil {
-						specificPrices = [staffMember.userID : defaultPrice]
-					} else {
-						specificPrices![staffMember.userID] = defaultPrice
-					}
+					specificTimes[staffMember.userID] = defaultTime
+					specificPrices[staffMember.userID] = defaultPrice
 					
 				} else { //if this service should not be enabled for staff member
 					
@@ -98,14 +85,14 @@ class AssignServicesViewController: UIViewController {
 							staffMembersCapableOfService.remove(at: indexToRemove)
 						}
 					}
-					specificTimes?[staffMember.userID] = nil
-					specificPrices?[staffMember.userID] = nil
+					specificTimes[staffMember.userID] = nil
+					specificPrices[staffMember.userID] = nil
 					
 				}
 				
-				service[K.Firebase.PlacesFieldNames.Services.specificTimes] = specificTimes
-				service[K.Firebase.PlacesFieldNames.Services.specificPrices] = specificPrices
-				service[K.Firebase.PlacesFieldNames.Services.staff] = staffMembersCapableOfService
+				service.specificTimes = specificTimes
+				service.specificPrices = specificPrices
+				service.assignedStaff = staffMembersCapableOfService
 				services[i] = service
 				
 			}
@@ -120,8 +107,8 @@ class AssignServicesViewController: UIViewController {
 	}
 	
 	
-	func staffMemberIsCapableOfService(staffMember: User?, service: [String : Any]?) -> Bool {
-		let staffMembersCapableOfService = service?[K.Firebase.PlacesFieldNames.Services.staff] as? [String] ?? []
+	func staffMemberIsCapableOfService(staffMember: User?, service: Service?) -> Bool {
+		let staffMembersCapableOfService = service?.assignedStaff ?? []
 		return staffMembersCapableOfService.contains(staffMember?.userID ?? "")
 	}
 	
@@ -164,7 +151,7 @@ extension AssignServicesViewController: UITableViewDataSource, UITableViewDelega
 		cell.tapToEnableLabel.isHidden = enabled[indexPath.row]
 		cell.assignServicesVC = self
 		cell.cellIndex = indexPath.row
-		cell.serviceNameLabel.text = service?[K.Firebase.PlacesFieldNames.Services.name] as? String ?? "Unknown Name"
+		cell.serviceNameLabel.text = service?.name ?? "Unknown Name"
 		return cell
 	}
 	
@@ -178,7 +165,7 @@ extension AssignServicesViewController: UITableViewDataSource, UITableViewDelega
 			cell.tapToEnableLabel.isHidden = !cell.tapToEnableLabel.isHidden
 			updateAssignedServices()
 		} else {
-			Alerts.showTwoOptionAlertDestructive(title: "Edit Confirmation", message: "Are you sure you want to unassign \(addStaffMemberVC?.staffMember?.firstName ?? "this staff member") from \(addStaffMemberVC?.services[indexPath.row][K.Firebase.PlacesFieldNames.Services.name] ?? "this service")?", sender: self, option1: "Unassign", option2: "Cancel", is1Destructive: true, is2Destructive: false, handler1: { (_) in
+			Alerts.showTwoOptionAlertDestructive(title: "Edit Confirmation", message: "Are you sure you want to unassign \(addStaffMemberVC?.staffMember?.firstName ?? "this staff member") from \(addStaffMemberVC?.services[indexPath.row].name ?? "this service")?", sender: self, option1: "Unassign", option2: "Cancel", is1Destructive: true, is2Destructive: false, handler1: { (_) in
 				
 				self.enabled[indexPath.row] = !self.enabled[indexPath.row]
 				cell.checkmark.isHidden = !cell.checkmark.isHidden

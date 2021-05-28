@@ -18,7 +18,7 @@ class PersonalCodeViewController: UIViewController {
 	var signInVC: SignInViewController?
 	
 	var textFields: [UITextField] = []
-	var textFieldsHoldAlert = [false, false, false, false]
+	var textFieldsHoldAlert = [false]
 	
 	var spinnerView = LoadingView()
 		
@@ -32,7 +32,6 @@ class PersonalCodeViewController: UIViewController {
 		textFields = [personalCodeTextField]
 		for textField in textFields {
 			textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
@@ -112,7 +111,8 @@ class PersonalCodeViewController: UIViewController {
 					self.spinnerView.create(parentVC: self)
 					self.spinnerView.label.text = "Creating business account..."
 					userDocRef.updateData([
-						K.Firebase.UserFieldNames.hasBusinessAccount:true
+						K.Firebase.UserFieldNames.hasBusinessAccount: true,
+						K.Firebase.UserFieldNames.personalCode: self.personalCodeTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
 					]) { (error) in
 						self.spinnerView.remove()
 						if let error = error {
@@ -132,7 +132,8 @@ class PersonalCodeViewController: UIViewController {
 				self.spinnerView.create(parentVC: self)
 				self.spinnerView.label.text = "Creating business account..."
 				userDocRef.updateData([
-					K.Firebase.UserFieldNames.hasBusinessAccount:true
+					K.Firebase.UserFieldNames.hasBusinessAccount: true,
+					K.Firebase.UserFieldNames.personalCode: self.personalCodeTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
 				]) { (error) in
 					self.spinnerView.remove()
 					if let error = error {
@@ -151,6 +152,14 @@ class PersonalCodeViewController: UIViewController {
 			Alerts.showNoOptionAlert(title: "An unknown error occurred", message: "Please restart the app and try again", sender: self)
 		}
 	}
+	
+	
+	@IBAction func cancelPressed(_ sender: UIBarButtonItem) {
+		Alerts.showTwoOptionAlertDestructive(title: "Are you sure you want to exit?", message: "You have not finished the registration process. You can finish the process later.", sender: self, option1: "Exit", option2: "Stay", is1Destructive: true, is2Destructive: false, handler1: { (_) in
+			self.dismiss(animated: true, completion: nil)
+		}, handler2: nil)
+	}
+	
 	
 }
 

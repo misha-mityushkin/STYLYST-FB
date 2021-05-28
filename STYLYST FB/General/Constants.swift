@@ -19,7 +19,8 @@ struct K {
 	}
 	
 	struct FontNames {
-		static let glacialIndifferenceRegular = "Glacial Indifference Regular"
+		static let glacialIndifferenceRegular = "GlacialIndifference-Regular"
+		static let glacialIndifferenceBold = "GlacialIndifference-Bold"
 	}
     
     struct Identifiers {
@@ -97,6 +98,10 @@ struct K {
 		static let eyeSlash = "eye.slash"
         static let loadingError = "exclamationmark.icloud"
 		static let chevronRight = "chevron.right"
+		static let compose = "square.and.pencil"
+		static let editText = "rectangle.and.pencil.and.ellipsis"
+		static let pencil = "pencil"
+		static let trash = "trash"
     }
     struct Images {
         static let firstLaunchSlideImageName = UIImage(named: K.ImageNames.firstLaunchSlideImageName)
@@ -133,17 +138,19 @@ struct K {
         static let goldenThemeColorDefault = "GoldenThemeColorDefault"
         static let goldenThemeColorInverse = "GoldenThemeColorInverse"
         static let goldenThemeColorDarker = "GoldenThemeColorDarker"
+		static let goldenThemeColorDefaultMoreContrast = "GoldenThemeColorDefaultMoreContrast"
         static let goldenThemeColorInverseMoreContrast = "GoldenThemeColorInverseMoreContrast"
         static let placeholderTextColor = "placeholderTextColor"
     }
     struct Colors {
-        static let goldenThemeColorLight = UIColor(named: K.ColorNames.goldenThemeColorLight)
-        static let goldenThemeColorDark = UIColor(named: K.ColorNames.goldenThemeColorDark)
-        static let goldenThemeColorDefault = UIColor(named: K.ColorNames.goldenThemeColorDefault)
-        static let goldenThemeColorInverse = UIColor(named: K.ColorNames.goldenThemeColorInverse)
-        static let goldenThemeColorDarker = UIColor(named: K.ColorNames.goldenThemeColorDarker)
-        static let goldenThemeColorInverseMoreContrast = UIColor(named: K.ColorNames.goldenThemeColorInverseMoreContrast)
-        static let placeholderTextColor = UIColor(named: K.ColorNames.placeholderTextColor)
+        static let goldenThemeColorLight = UIColor(named: ColorNames.goldenThemeColorLight)
+        static let goldenThemeColorDark = UIColor(named: ColorNames.goldenThemeColorDark)
+        static let goldenThemeColorDefault = UIColor(named: ColorNames.goldenThemeColorDefault)
+        static let goldenThemeColorInverse = UIColor(named: ColorNames.goldenThemeColorInverse)
+        static let goldenThemeColorDarker = UIColor(named: ColorNames.goldenThemeColorDarker)
+		static let goldenThemeColorDefaultMoreContrast = UIColor(named: ColorNames.goldenThemeColorDefaultMoreContrast)
+        static let goldenThemeColorInverseMoreContrast = UIColor(named: ColorNames.goldenThemeColorInverseMoreContrast)
+        static let placeholderTextColor = UIColor(named: ColorNames.placeholderTextColor)
     }
     
     struct UserDefaultKeys {
@@ -233,9 +240,11 @@ struct K {
             static let introParagraph = "introParagraph"
 			static let businessType = "businessType"
 			
+			static let serviceCategories = "serviceCategories"
 			static let services = "services"
 			struct Services {
 				static let enabled = "enabled"
+				static let category = "category"
 				static let name = "name"
 				static let description = "description"
 				static let defaultPrice = "price"

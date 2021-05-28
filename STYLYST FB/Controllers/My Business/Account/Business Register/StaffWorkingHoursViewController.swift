@@ -12,6 +12,7 @@ class StaffWorkingHoursViewController: UIViewController {
 	
 	@IBOutlet weak var titleLabel: UILabel!
 	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var specificDatesInstructionLabel: UILabel!
 	
 	var addStaffMemberVC: AddStaffMemberViewController?
 	
@@ -22,6 +23,7 @@ class StaffWorkingHoursViewController: UIViewController {
 		tableView.dataSource = self
 		tableView.delegate = self
 		titleLabel.text = "\(addStaffMemberVC?.staffMember?.firstName ?? "Staff Member")'s Working Hours"
+		specificDatesInstructionLabel.text = "Specify dates when \(addStaffMemberVC?.staffMember?.firstName ?? "this staff memeber") works on an altered schedule"
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -74,7 +76,7 @@ extension StaffWorkingHoursViewController: UITableViewDataSource, UITableViewDel
 		cell.addDisclosureIndicator()
 		return cell
 	}
-	
+		
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		selectedDayIndex = indexPath.row
 		performSegue(withIdentifier: K.Segues.staffWorkingHoursToStaffWeekdaySchedule, sender: self)

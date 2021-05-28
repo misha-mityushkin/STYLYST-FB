@@ -55,7 +55,6 @@ class ContinueRegistrationViewController: UIViewController {
         textFields = [otpTextField, passwordTextField, confirmPasswordTextField]
         for textField in textFields {
             textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
         }
         UITextField.format(textFields: textFields, height: 40, padding: 10)
         let passwordIcon: UIImage

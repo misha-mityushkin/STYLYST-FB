@@ -21,12 +21,9 @@ class StaffMembersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-		noDataLabel?.numberOfLines = 0
-		noDataLabel!.text = "No staff members found. Tap the + icon in the top right corner to add a staff member"
-		noDataLabel!.textColor = K.Colors.goldenThemeColorDefault
-		noDataLabel!.textAlignment = .center
-		noDataLabel!.isHidden = true
+		updateStaff()
+		
+		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No staff members added yet. Tap the + icon in the top right corner to add a staff member")
 		tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
 		tableView.register(UINib(nibName: K.Nibs.staffMembersCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.staffMembersCellIdentifier)
     }
@@ -57,12 +54,16 @@ class StaffMembersTableViewController: UITableViewController {
 	}
 	
 	func updateStaff() {
+		staffMembers?.sort(by: { user1, user2 in
+			return user1.firstName < user2.firstName
+		})
 		if let staffMembers = staffMembers {
 			businessRegisterVC?.staffMembers = staffMembers
 			tableView.reloadData()
 		}
 	}
 
+	
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

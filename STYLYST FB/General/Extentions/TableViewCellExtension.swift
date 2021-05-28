@@ -10,13 +10,14 @@ import UIKit
 
 extension UITableViewCell {
 	func addDisclosureIndicator() {
-		let button = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+		let disclosureIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
 		if #available(iOS 13.0, *) {
-			button.setImage(UIImage(systemName: K.ImageNames.chevronRight), for: .normal)
+			disclosureIcon.image = UIImage(systemName: K.ImageNames.chevronRight)
 		} else {
-			button.setImage(UIImage(named: K.ImageNames.chevronRight), for: .normal)
+			disclosureIcon.image = UIImage(named: K.ImageNames.chevronRight)
 		}
-		button.tintColor = .gray
-		self.accessoryView = button
+		disclosureIcon.contentMode = .scaleAspectFit
+		disclosureIcon.tintColor = .gray
+		self.accessoryView = disclosureIcon
 	}
 }

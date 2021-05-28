@@ -19,6 +19,8 @@ class AddStaffMemberViewController: UIViewController {
 	@IBOutlet weak var emailTextField: UITextField!
 	@IBOutlet weak var personalCodeTextField: UITextField!
 	
+	@IBOutlet weak var separator1: UIView!
+	@IBOutlet weak var separator2: UIView!
 	@IBOutlet weak var userInfoStackview: UIStackView!
 	@IBOutlet weak var infoLabel: UILabel!
 	@IBOutlet weak var saveButton: UIButton!
@@ -39,7 +41,7 @@ class AddStaffMemberViewController: UIViewController {
 	
 	var staffMember: User?
 	
-	var services: [[String : Any]] = []
+	var services: [Service] = []
 	var weeklyHours: [String : [String]]?
 	var specificHours: [String : [String]]?
 	
@@ -52,25 +54,26 @@ class AddStaffMemberViewController: UIViewController {
 			isModalInPresentation = true
 		}
 		
-		userInfoStackview.alpha = 0
-		infoLabel.alpha = 0
-		saveButton.alpha = 0
+		showHideUserInfo(show: false)
 		
 		textFields = [emailTextField, personalCodeTextField]
 		for textField in textFields {
 			textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
-		services = staffMembersVC?.businessRegisterVC?.services ?? []
+		services = (staffMembersVC?.businessRegisterVC?.services ?? []).sorted(by: { service1, service2 in
+			return service1.name < service2.name
+		})
+		
 		if isEditStaffMember {
 			titleLabel.text = "Edit Staff Member"
+			
 			deleteButton.isEnabled = true
 			deleteButton.tintColor = .red
-			userInfoStackview.alpha = 1
-			infoLabel.alpha = 1
-			saveButton.alpha = 1
+			
+			showHideUserInfo(show: true)
+			
 			staffMember = staffMembersVC?.staffMembers?[selectedIndex]
 			emailTextField.text = staffMember?.email
 			personalCodeTextField.text = staffMember?.personalCode
@@ -78,6 +81,7 @@ class AddStaffMemberViewController: UIViewController {
 			lastNameLabel.text = "Last Name: \(staffMember?.lastName ?? "")"
 			emailLabel.text = "Email: \(staffMember?.email ?? "Unknown Email")"
 			phoneNumberLabel.text = "Phone Number: \(Helpers.format(phoneNumber: staffMember?.phoneNumber ?? "0000000000"))"
+			
 			weeklyHours = staffMembersVC?.businessRegisterVC?.staffWeeklyHours?[staffMember?.userID ?? ""]
 			specificHours = staffMembersVC?.businessRegisterVC?.staffSpecificHours?[staffMember?.userID ?? ""]
 			assignedServices = true
@@ -104,12 +108,24 @@ class AddStaffMemberViewController: UIViewController {
 		UITextField.formatPlaceholder(textFields: nonAlteredTextFields, height: 40, padding: 10)
 	}
 	
+	func showHideUserInfo(show: Bool) {
+		var alpha: CGFloat = 0
+		if show {
+			alpha = 1
+		}
+		separator1.alpha = alpha
+		separator2.alpha = alpha
+		userInfoStackview.alpha = alpha
+		infoLabel.alpha = alpha
+		saveButton.alpha = alpha
+	}
+	
 	@IBAction func infoPressed(_ sender: UIButton) {
-		Alerts.showNoOptionAlert(title: "Add Staff Member Info", message: "Your staff members must already have a STYLYST account. Ask them for the email address they used to create their account as well as their personal identifier code to find them in our database. You can add yourself as a staff member using the same process.", sender: self)
+		Alerts.showNoOptionAlert(title: "Add Staff Member Info", message: "Your staff members must already have a STYLYST account. Ask them for the email address they used to create their account as well as their personal identifier code so we can look them up. You can add yourself as a staff member using the same process.", sender: self)
 	}
 	
 	
-	@IBAction func findUserPressed(_ sender: UIButton) {
+	@IBAction func lookUpUserPressed(_ sender: UIButton) {
 		hideKeyboard()
 		var isValid = true
 		
@@ -182,10 +198,10 @@ class AddStaffMemberViewController: UIViewController {
 							}
 							
 							for i in 0..<self.services.count {
-								var staffIDs = self.services[i][K.Firebase.PlacesFieldNames.Services.staff] as? [String] ?? []
+								var staffIDs = self.services[i].assignedStaff
 								if let indexToRemove =  staffIDs.firstIndex(of: self.staffMember?.userID ?? "") { //does the current staff member appear in any services?
 									staffIDs.remove(at: indexToRemove)
-									self.services[i][K.Firebase.PlacesFieldNames.Services.staff] = staffIDs
+									self.services[i].assignedStaff = staffIDs
 								}
 							}
 							
@@ -198,24 +214,18 @@ class AddStaffMemberViewController: UIViewController {
 								self.emailLabel.text = "Email: \(email)"
 								self.phoneNumberLabel.text = "Phone Number: \(Helpers.format(phoneNumber: phoneNumber))"
 								UIView.animate(withDuration: 0.7) {
-									self.userInfoStackview.alpha = 1
-									self.infoLabel.alpha = 1
-									self.saveButton.alpha = 1
+									self.showHideUserInfo(show: true)
 								}
 							} else {
 								UIView.animate(withDuration: 0.7) {
-									self.userInfoStackview.alpha = 0
-									self.infoLabel.alpha = 0
-									self.saveButton.alpha = 0
+									self.showHideUserInfo(show: false)
 								} completion: { (_) in
 									self.firstNameLabel.text = "First Name: \(firstName)"
 									self.lastNameLabel.text = "Last Name: \(lastName)"
 									self.emailLabel.text = "Email: \(email)"
 									self.phoneNumberLabel.text = "Phone Number: \(Helpers.format(phoneNumber: phoneNumber))"
 									UIView.animate(withDuration: 0.7) {
-										self.userInfoStackview.alpha = 1
-										self.infoLabel.alpha = 1
-										self.saveButton.alpha = 1
+										self.showHideUserInfo(show: true)
 									}
 								}
 								
@@ -337,18 +347,18 @@ class AddStaffMemberViewController: UIViewController {
 			
 			for i in 0..<self.services.count {
 				
-				var staffIDs = self.services[i][K.Firebase.PlacesFieldNames.Services.staff] as? [String] ?? []
+				var staffIDs = self.services[i].assignedStaff
 				
 				if let indexToRemove =  staffIDs.firstIndex(of: self.staffMember?.userID ?? "") { //does the current staff member appear in any services?
-					var specifitTimes = self.services[i][K.Firebase.PlacesFieldNames.Services.specificTimes] as? [String : String]
-					var specifitPrices = self.services[i][K.Firebase.PlacesFieldNames.Services.specificPrices] as? [String : Double]
-					specifitTimes?[self.staffMember?.userID ?? ""] = nil
-					specifitPrices?[self.staffMember?.userID ?? ""] = nil
+					var specifitTimes = self.services[i].specificTimes
+					var specifitPrices = self.services[i].specificPrices
+					specifitTimes[self.staffMember?.userID ?? ""] = nil
+					specifitPrices[self.staffMember?.userID ?? ""] = nil
 					
 					staffIDs.remove(at: indexToRemove) //remove reference to staff member
-					self.services[i][K.Firebase.PlacesFieldNames.Services.staff] = staffIDs // update the staff array
-					self.services[i][K.Firebase.PlacesFieldNames.Services.specificTimes] = specifitTimes // update specific times
-					self.services[i][K.Firebase.PlacesFieldNames.Services.specificPrices] = specifitPrices // update specific prices
+					self.services[i].assignedStaff = staffIDs // update the staff array
+					self.services[i].specificTimes = specifitTimes // update specific times
+					self.services[i].specificPrices = specifitPrices // update specific prices
 				}
 				
 			}

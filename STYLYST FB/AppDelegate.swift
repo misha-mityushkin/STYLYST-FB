@@ -21,7 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.enableAutoToolbar = true
+		IQKeyboardManager.shared.toolbarTintColor = K.Colors.goldenThemeColorInverseMoreContrast
+		IQKeyboardManager.shared.placeholderColor = K.Colors.goldenThemeColorInverseMoreContrast
         return true
     }
 

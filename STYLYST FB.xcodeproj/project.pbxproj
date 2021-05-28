@@ -83,6 +83,8 @@
 		CCB599C3250090B3003CAFA8 /* PersonalCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB599C2250090B3003CAFA8 /* PersonalCodeViewController.swift */; };
 		CCC450E825031D4A009CFC5F /* StaffWeekdayScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC450E725031D4A009CFC5F /* StaffWeekdayScheduleViewController.swift */; };
 		CCC450EC25031E65009CFC5F /* StaffSpecificDatesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC450EB25031E65009CFC5F /* StaffSpecificDatesTableViewController.swift */; };
+		CCD7C2F5264B62D7001EB590 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD7C2F4264B62D7001EB590 /* Service.swift */; };
+		CCD7C2F7264B7C85001EB590 /* WeeklyHours.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD7C2F6264B7C85001EB590 /* WeeklyHours.swift */; };
 		CCD922EE24C9125F00AAEB70 /* ServicesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD922EC24C9125F00AAEB70 /* ServicesTableViewCell.swift */; };
 		CCD922EF24C9125F00AAEB70 /* ServicesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CCD922ED24C9125F00AAEB70 /* ServicesTableViewCell.xib */; };
 		CCDB541824CCC4590012394D /* NavigationBarExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDB541724CCC4590012394D /* NavigationBarExtention.swift */; };
@@ -176,6 +178,8 @@
 		CCB599C2250090B3003CAFA8 /* PersonalCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCodeViewController.swift; sourceTree = "<group>"; };
 		CCC450E725031D4A009CFC5F /* StaffWeekdayScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffWeekdayScheduleViewController.swift; sourceTree = "<group>"; };
 		CCC450EB25031E65009CFC5F /* StaffSpecificDatesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSpecificDatesTableViewController.swift; sourceTree = "<group>"; };
+		CCD7C2F4264B62D7001EB590 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		CCD7C2F6264B7C85001EB590 /* WeeklyHours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyHours.swift; sourceTree = "<group>"; };
 		CCD922EC24C9125F00AAEB70 /* ServicesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesTableViewCell.swift; sourceTree = "<group>"; };
 		CCD922ED24C9125F00AAEB70 /* ServicesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServicesTableViewCell.xib; sourceTree = "<group>"; };
 		CCDB541724CCC4590012394D /* NavigationBarExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarExtention.swift; sourceTree = "<group>"; };
@@ -377,7 +381,9 @@
 			children = (
 				CC6FEEF524B8D97600CC7499 /* BusinessType.swift */,
 				CC8E47BA24A8166100EDBC62 /* BusinessLocation.swift */,
+				CCD7C2F6264B7C85001EB590 /* WeeklyHours.swift */,
 				CC78D0F324D62B56008EB88F /* User.swift */,
+				CCD7C2F4264B62D7001EB590 /* Service.swift */,
 				CC78D0F524D65CD6008EB88F /* SubscriptionPlan.swift */,
 			);
 			path = Models;
@@ -610,6 +616,7 @@
 				CCA9D3E8249E91DA000A0CCE /* Slide.swift in Sources */,
 				CCA9D3D6249E8FAA000A0CCE /* String+Extension.swift in Sources */,
 				CC246DF024D7214400455091 /* DoubleExtension.swift in Sources */,
+				CCD7C2F7264B7C85001EB590 /* WeeklyHours.swift in Sources */,
 				CCA9D3EE249E9335000A0CCE /* FirstLaunchSlideViewController.swift in Sources */,
 				CC8C6C77249F05E500E6239F /* RegisterNavController.swift in Sources */,
 				CCA421AC24F18CED008785B9 /* TableViewCellExtension.swift in Sources */,
@@ -653,6 +660,7 @@
 				CCA81702249E99320045AA29 /* AppointmentsViewController.swift in Sources */,
 				CC78D0F824D66B95008EB88F /* SegmentedControlExtention.swift in Sources */,
 				CCE0CE7624DA583300D90341 /* AssignStaffMembersViewController.swift in Sources */,
+				CCD7C2F5264B62D7001EB590 /* Service.swift in Sources */,
 				CCA81707249E9C990045AA29 /* ProfileSectionTableViewCell.swift in Sources */,
 				CCA9D3DE249E8FAA000A0CCE /* StringExtension.swift in Sources */,
 				CCA9D3D8249E8FAA000A0CCE /* PasswordRules.swift in Sources */,

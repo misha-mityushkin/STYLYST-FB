@@ -61,7 +61,6 @@ class StaffWeekdayScheduleViewController: UIViewController {
 		textFields = [openTimeTextField1, closeTimeTextField1, openTimeTextField2, closeTimeTextField2]
 		for textField in textFields {
 			textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
@@ -132,7 +131,7 @@ class StaffWeekdayScheduleViewController: UIViewController {
 					addRemoveShiftButton.setTitle("Add Second Shift", for: .normal)
 					addRemoveShiftButton.setTitleColor(.black, for: .normal)
 					hoursStackView2.alpha = 0
-					openTimePicker2?.setDate(from: "2000-1-1 9:00", format: K.Strings.dateAndTimeFormatString, animated: false)
+					openTimePicker2?.setDate(from: "2000-1-1 14:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 					closeTimePicker2?.setDate(from: "2000-1-1 17:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 					timeUpdated(openTimePicker2!)
 					timeUpdated(closeTimePicker2!)
@@ -164,9 +163,9 @@ class StaffWeekdayScheduleViewController: UIViewController {
 		scheduleStrings = ["closed"]
 		
 		openTimePicker1?.setDate(from: "2000-1-1 9:00", format: K.Strings.dateAndTimeFormatString, animated: false)
-		closeTimePicker1?.setDate(from: "2000-1-1 17:00", format: K.Strings.dateAndTimeFormatString, animated: false)
+		closeTimePicker1?.setDate(from: "2000-1-1 13:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 		
-		openTimePicker2?.setDate(from: "2000-1-1 9:00", format: K.Strings.dateAndTimeFormatString, animated: false)
+		openTimePicker2?.setDate(from: "2000-1-1 14:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 		closeTimePicker2?.setDate(from: "2000-1-1 17:00", format: K.Strings.dateAndTimeFormatString, animated: false)
 		
 		timeUpdated(openTimePicker1!)

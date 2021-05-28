@@ -46,6 +46,9 @@ class BusinessRegisterViewController: UIViewController {
 	@IBOutlet weak var planDetailsLabel: UILabel!
 	@IBOutlet weak var monthlyFeeLabel: UILabel!
 	@IBOutlet weak var numStaffMembersLabel: UILabel!
+	
+	@IBOutlet weak var finishButton: UIButton!
+	
     
     var textFields: [UITextField] = []
     var textFieldsHoldAlert = [false, false, false, false]
@@ -79,7 +82,8 @@ class BusinessRegisterViewController: UIViewController {
 	var staffWeeklyHours: [String : [String : [String]]]?
 	var staffSpecificHours: [String : [String : [String]]]?
 	
-	var services: [[String : Any]] = []
+	var services: [Service] = []
+	var serviceCategories: [String] = []
 	
 	var staffMembers: [User] = []
 	
@@ -103,7 +107,6 @@ class BusinessRegisterViewController: UIViewController {
         textFields = [locationNameTextField, contactNumberTextField, contactEmailTextField, introParagraphTextField]
         for textField in textFields {
             textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
         }
         UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
@@ -124,6 +127,7 @@ class BusinessRegisterViewController: UIViewController {
 			manageBusinessHoursButton.setTitle("Edit Hours", for: .normal)
 			manageStaffButton.setTitle("Edit Staff", for: .normal)
 			manageServicesButton.setTitle("Edit Services", for: .normal)
+			finishButton.setTitle("Save", for: .normal)
 		} else {
 			titleLabel.text = "Add Business"
 		}
@@ -157,6 +161,7 @@ class BusinessRegisterViewController: UIViewController {
         UITextField.formatBackground(textFields: textFields, height: 40, padding: 10)
         UITextField.formatPlaceholder(textFields: nonAlteredTextFields, height: 40, padding: 10)
     }
+	
 	
 	func loadSubscriptionPlans() {
 		spinnerView.create(parentVC: self)
@@ -215,6 +220,7 @@ class BusinessRegisterViewController: UIViewController {
 			if location == nil {
 				print("location is nil")
 			}
+			
 			for i in 0..<businessLocation.numActualImages {
 				imageViews[i].contentMode = .scaleAspectFill
                 imageViews[i].image = businessLocation.images[i]
@@ -232,6 +238,7 @@ class BusinessRegisterViewController: UIViewController {
 			}
 			
 			services = businessLocation.services
+			serviceCategories = businessLocation.serviceCategories
 			staffMembers = businessLocation.staffMembers
 			weeklyHours = businessLocation.weeklyHours
 			staffWeeklyHours = businessLocation.staffWeeklyHours
@@ -524,14 +531,12 @@ class BusinessRegisterViewController: UIViewController {
 		if images.isEmpty {
 			isValid = false
 			Alerts.showNoOptionAlert(title: "Missing images", message: "You must provide at least one image", sender: self)
+			return
 		}
 		
 		if let introParagraph = introParagraphTextField.text, !introParagraph.isEmpty {
 			if introParagraph.count > 500 {
-//				introParagraphTextField.text = ""
-//				introParagraphTextField.changePlaceholderText(to: "Too long!", withColor: .systemRed)
 				isValid = false
-//				textFieldsHoldAlert[3] = true
 				Alerts.showNoOptionAlert(title: "Intro paragraph is too long", message: "Your paragraph must be 500 characters or less", sender: self)
 				return
 			}
@@ -614,12 +619,12 @@ class BusinessRegisterViewController: UIViewController {
 			Alerts.showNoOptionAlert(title: "Missing Staff Working Hours", message: "You must specify each staff member's working hours", sender: self)
 		}
 		
-		if services.count <= 0 {
+		if services.isEmpty || serviceCategories.isEmpty {
 			isValid = false
 			Alerts.showNoOptionAlert(title: "Missing Services", message: "You must add at least one service", sender: self)
 		}
 		
-		if staffMembers.count <= 0 {
+		if staffMembers.isEmpty {
 			isValid = false
 			Alerts.showNoOptionAlert(title: "Missing Staff Members", message: "You must add at least one staff member", sender: self)
 		}
@@ -638,6 +643,7 @@ class BusinessRegisterViewController: UIViewController {
 			for staffMember in staffMembers {
 				staffUserIDs.append(staffMember.userID)
 			}
+			var servicesData: [[String : Any]] = []
 			
 			spinnerView.create(parentVC: self)
 			
@@ -655,14 +661,13 @@ class BusinessRegisterViewController: UIViewController {
 			
 			var strings: [String] = []
 			for service in services {
-				if let name = service[K.Firebase.PlacesFieldNames.Services.name] as? String {
-					strings.append(name)
-				}
+				servicesData.append(service.getServiceData())
+				strings.append(service.name)
 			}
 			strings.append(locationName)
 			strings.append(K.Collections.businessTypes[businessTypePickerView.selectedRow(inComponent: 0)])
 			let keywords = Helpers.getKeywords(forArray: strings)
-			print(keywords)
+			//print(keywords)
 			
 			//image names
 			for i in 1...images.count {
@@ -699,7 +704,8 @@ class BusinessRegisterViewController: UIViewController {
 								K.Firebase.PlacesFieldNames.introParagraph: paragraph,
 								K.Firebase.PlacesFieldNames.businessType: businessTypeIdentifier,
 								K.Firebase.PlacesFieldNames.subscriptionPlan: planName,
-								K.Firebase.PlacesFieldNames.services: services,
+								K.Firebase.PlacesFieldNames.serviceCategories: serviceCategories,
+								K.Firebase.PlacesFieldNames.services: servicesData,
 								K.Firebase.PlacesFieldNames.staffUserIDs: staffUserIDs,
 								K.Firebase.PlacesFieldNames.weeklyHours: weeklyHours ?? [String : String](),
 								K.Firebase.PlacesFieldNames.specificHours: specificHours ?? [String : String](),
@@ -741,7 +747,8 @@ class BusinessRegisterViewController: UIViewController {
 								K.Firebase.PlacesFieldNames.introParagraph: paragraph,
 								K.Firebase.PlacesFieldNames.businessType: businessTypeIdentifier,
 								K.Firebase.PlacesFieldNames.subscriptionPlan: planName,
-								K.Firebase.PlacesFieldNames.services: services,
+								K.Firebase.PlacesFieldNames.serviceCategories: serviceCategories,
+								K.Firebase.PlacesFieldNames.services: servicesData,
 								K.Firebase.PlacesFieldNames.staffUserIDs: staffUserIDs,
 								K.Firebase.PlacesFieldNames.weeklyHours: weeklyHours ?? [String : String](),
 								K.Firebase.PlacesFieldNames.specificHours: specificHours ?? [String : String](),
@@ -807,7 +814,8 @@ class BusinessRegisterViewController: UIViewController {
 						K.Firebase.PlacesFieldNames.introParagraph: paragraph,
 						K.Firebase.PlacesFieldNames.businessType: businessTypeIdentifier,
 						K.Firebase.PlacesFieldNames.subscriptionPlan: planName,
-						K.Firebase.PlacesFieldNames.services: services,
+						K.Firebase.PlacesFieldNames.serviceCategories: serviceCategories,
+						K.Firebase.PlacesFieldNames.services: servicesData,
 						K.Firebase.PlacesFieldNames.staffUserIDs: staffUserIDs,
 						K.Firebase.PlacesFieldNames.weeklyHours: weeklyHours ?? [String : String](),
 						K.Firebase.PlacesFieldNames.specificHours: specificHours ?? [String : String](),
@@ -1135,12 +1143,23 @@ class BusinessRegisterViewController: UIViewController {
 			let chooseLocationVC = segue.destination as! ChooseLocationViewController
             chooseLocationVC.businessRegisterVC = self
 			if isEditBusiness {
-				let address = businessLocation!.addressFormatted
-				let geoCoder = CLGeocoder()
-				geoCoder.geocodeAddressString(address) { (placemarks, error) in
-					guard let placemarks = placemarks, let location = placemarks.first?.location else { return }
-					chooseLocationVC.setLocation(location: MKMapItem(placemark: MKPlacemark(coordinate: location.coordinate)))
-					chooseLocationVC.selectedLocationPin.title = address
+				if let location = location {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						chooseLocationVC.setLocation(location: location)
+						if self.isNewLocation {
+							chooseLocationVC.selectedLocationPin.title = Helpers.parseAddress(for: location.placemark)
+						} else {
+							chooseLocationVC.selectedLocationPin.title = self.businessLocation?.addressFormatted
+						}
+					}
+				} else {
+					let address = businessLocation!.addressFormatted
+					let geoCoder = CLGeocoder()
+					geoCoder.geocodeAddressString(address) { (placemarks, error) in
+						guard let placemarks = placemarks, let location = placemarks.first?.location else { return }
+						chooseLocationVC.setLocation(location: MKMapItem(placemark: MKPlacemark(coordinate: location.coordinate)))
+						chooseLocationVC.selectedLocationPin.title = address
+					}
 				}
 			} else {
 				if let location = location {
@@ -1161,6 +1180,7 @@ class BusinessRegisterViewController: UIViewController {
 			let servicesVC = segue.destination as! ServicesTableViewController
 			servicesVC.businessRegisterVC = self
 			servicesVC.services = services
+			servicesVC.categories = serviceCategories
 		}
     }
 

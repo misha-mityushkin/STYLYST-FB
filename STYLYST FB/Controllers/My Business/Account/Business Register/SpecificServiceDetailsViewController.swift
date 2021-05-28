@@ -38,7 +38,7 @@ class SpecificServiceDetailsViewController: UIViewController {
 			isModalInPresentation = true
 		}
 		
-		timePicker = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 3))
+		timePicker = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 4))
 		timePicker?.dataSource = self
 		timePicker?.delegate = self
 		timeTextField.inputView = timePicker
@@ -46,7 +46,6 @@ class SpecificServiceDetailsViewController: UIViewController {
 		textFields = [priceTextField, timeTextField]
 		for textField in textFields {
 			textField.delegate = self
-			textField.addDoneButtonOnKeyboard()
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
@@ -84,11 +83,11 @@ class SpecificServiceDetailsViewController: UIViewController {
 		} else if let assignServicesVC = assignServicesVC {
 			let staffMember = assignServicesVC.addStaffMemberVC?.staffMember
 			let service = assignServicesVC.addStaffMemberVC?.services[assignServicesVC.selectedIndex]
-			let specificTimes = service?[K.Firebase.PlacesFieldNames.Services.specificTimes] as? [String : String]
-			let specificPrices = service?[K.Firebase.PlacesFieldNames.Services.specificPrices] as? [String : Double]
+			let specificTimes = service?.specificTimes
+			let specificPrices = service?.specificPrices
 			
-			let time = specificTimes?[staffMember?.userID ?? ""] ?? service?[K.Firebase.PlacesFieldNames.Services.defaultTime] as? String
-			let price = specificPrices?[staffMember?.userID ?? ""] ?? service?[K.Firebase.PlacesFieldNames.Services.defaultPrice] as? Double
+			let time = specificTimes?[staffMember?.userID ?? ""] ?? service?.defaultTime
+			let price = specificPrices?[staffMember?.userID ?? ""] ?? service?.defaultPrice
 			
 			timeTextField.text = time ?? "0h 0min"
 			priceTextField.text = String(format: "$%.02f", price ?? 0)
@@ -111,7 +110,7 @@ class SpecificServiceDetailsViewController: UIViewController {
 				}
 			}
 			
-			instructionLabel.text = "Add a custom price and elapsed time for \"\(service?[K.Firebase.PlacesFieldNames.Services.name] ?? "this service")\" specifically for \(staffMember?.firstName ?? "this staff member") \(staffMember?.lastName ?? "")"
+			instructionLabel.text = "Add a custom price and elapsed time for \"\(service?.name ?? "this service")\" specifically for \(staffMember?.firstName ?? "this staff member") \(staffMember?.lastName ?? "")"
 			
 		} else {
 			Alerts.showNoOptionAlert(title: "An error occurred", message: "Please restart the app and try again", sender: self) { (_) in
@@ -154,8 +153,8 @@ class SpecificServiceDetailsViewController: UIViewController {
 				}
 			} else if let assignServicesVC = self.assignServicesVC {
 				let service = assignServicesVC.addStaffMemberVC?.services[assignServicesVC.selectedIndex]
-				self.priceTextField.text = String(format: "$%.02f", service?[K.Firebase.PlacesFieldNames.Services.defaultPrice] as? Double ?? 0)
-				self.timeTextField.text = "\(service?[K.Firebase.PlacesFieldNames.Services.defaultTime] as? String ?? "0h 0min")"
+				self.priceTextField.text = String(format: "$%.02f", service?.defaultPrice ?? 0)
+				self.timeTextField.text = "\(service?.defaultTime ?? "0h 0min")"
 				if self.isValidInformation() {
 					self.saveDetails()
 				}
@@ -255,31 +254,22 @@ class SpecificServiceDetailsViewController: UIViewController {
 				
 				if var service = assignServicesVC.addStaffMemberVC?.services[assignServicesVC.selectedIndex], let staffMember = assignServicesVC.addStaffMemberVC?.staffMember {
 					
-					var specificTimes = service[K.Firebase.PlacesFieldNames.Services.specificTimes] as? [String : String]
-					var specificPrices = service[K.Firebase.PlacesFieldNames.Services.specificPrices] as? [String : Double]
+					var specificTimes = service.specificTimes
+					var specificPrices = service.specificPrices
 					
-					if specificTimes == nil {
-						specificTimes = [staffMember.userID : time]
-					} else {
-						specificTimes![staffMember.userID] = time
-					}
+					specificTimes[staffMember.userID] = time
+					specificPrices[staffMember.userID] = price
 					
-					if specificPrices == nil {
-						specificPrices = [staffMember.userID : price]
-					} else {
-						specificPrices![staffMember.userID] = price
-					}
-					
-					service[K.Firebase.PlacesFieldNames.Services.specificTimes] = specificTimes
-					service[K.Firebase.PlacesFieldNames.Services.specificPrices] = specificPrices
+					service.specificTimes = specificTimes
+					service.specificPrices = specificPrices
 					assignServicesVC.addStaffMemberVC?.services[assignServicesVC.selectedIndex] = service
 					
 					if reset {
-						Alerts.showNoOptionAlert(title: "Details Reset to Defaults", message: "The specific details for \"\(service[K.Firebase.PlacesFieldNames.Services.name] ?? "this service")\" have been reset for \(staffMember.firstName) \(staffMember.lastName). It now takes \(time) and costs \(String(format: "$%.02f", price))", sender: self) { (_) in
+						Alerts.showNoOptionAlert(title: "Details Reset to Defaults", message: "The specific details for \"\(service.name)\" have been reset for \(staffMember.firstName) \(staffMember.lastName). It now takes \(time) and costs \(String(format: "$%.02f", price))", sender: self) { (_) in
 							self.dismiss(animated: true, completion: nil)
 						}
 					} else {
-						Alerts.showNoOptionAlert(title: "Details Updated", message: "\"\(service[K.Firebase.PlacesFieldNames.Services.name] ?? "This service")\" now takes \(time) and costs \(String(format: "$%.02f", price)) specifically for \(staffMember.firstName) \(staffMember.lastName)", sender: self) { (_) in
+						Alerts.showNoOptionAlert(title: "Details Updated", message: "\"\(service.name)\" now takes \(time) and costs \(String(format: "$%.02f", price)) specifically for \(staffMember.firstName) \(staffMember.lastName)", sender: self) { (_) in
 							self.dismiss(animated: true, completion: nil)
 						}
 					}

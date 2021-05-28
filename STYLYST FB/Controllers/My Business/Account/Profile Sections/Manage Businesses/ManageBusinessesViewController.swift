@@ -35,16 +35,9 @@ class ManageBusinessesViewController: UIViewController {
         
         navigationController?.isNavigationBarHidden = false
         navigationItem.hidesBackButton = false
-        
-        noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-        noDataLabel!.text = "Looks empty in here :(\nTap the + icon in the top right to add a business"
-        noDataLabel!.textColor = K.Colors.goldenThemeColorDefault
-        noDataLabel!.textAlignment = .center
-        noDataLabel!.isHidden = true
-        
-        tableView.dataSource = self
-        tableView.delegate = self
 		
+		// Doesn't work???
+		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No businesses added yet. Tap the + icon in the top right to add a business")
 		tableView.register(UINib(nibName: K.Nibs.manageBusinessesHeaderCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.manageBusinessesHeaderCellIdentifier)
         tableView.register(UINib(nibName: K.Nibs.manageBusinessesCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.manageBusinessesCellIdentifier)
     }
@@ -263,13 +256,12 @@ extension ManageBusinessesViewController: UITableViewDataSource {
 			}
 			
 			for i in 0..<location.images.count {
-				cell.imageViews[i].image = location.images[i]
 				if i < location.numActualImages {
+					cell.imageViews[i].image = location.images[i]
 					cell.imageViews[i].contentMode = .scaleAspectFill
 					cell.imageViews[i].layer.cornerRadius = 10
 				} else {
-					cell.imageViews[i].contentMode = .scaleAspectFit
-					cell.imageViews[i].layer.cornerRadius = 0
+					cell.imageViews[i].image = nil
 				}
 			}
 			if indexPath.row < businessLocations.count {
