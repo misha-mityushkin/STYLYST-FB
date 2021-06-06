@@ -29,10 +29,9 @@ class AssignServicesViewController: UIViewController {
 			enabled.append(staffMemberIsCapableOfService(staffMember: staffMember, service: service))
 		}
 		
-		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No services found. No worries, you can always add and assign services after adding staff members.")
-		
-		tableView.backgroundView = nil
+		noDataLabel = tableView.addNoDataLabel(withText: "")
 		tableView.register(UINib(nibName: K.Nibs.assignServicesCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.assignServicesCellIdentifier)
+		tableView.tableFooterView = UIView()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -40,9 +39,17 @@ class AssignServicesViewController: UIViewController {
 		navigationBar.tintColor = .black
 		navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
 	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		// Have to set noDataLabel here for it to get the proper tableview bounds
+		noDataLabel?.removeFromSuperview() // Remove blank label
+		noDataLabel = tableView.addNoDataLabel(withText: "No services found. No worries, you can always add and assign services after adding staff members.")
+		tableView.reloadData()
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		
 		var hasPreviouslyAssigned = false
 		for service in addStaffMemberVC?.services ?? [] {
 			if staffMemberIsCapableOfService(staffMember: addStaffMemberVC?.staffMember, service: service) {
@@ -126,16 +133,7 @@ class AssignServicesViewController: UIViewController {
 extension AssignServicesViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		if addStaffMemberVC?.services.count == 0 {
-			if let noDataLabel = noDataLabel {
-				noDataLabel.isHidden = false
-				tableView.backgroundView = noDataLabel
-			}
-			tableView.separatorStyle = .none
-		} else {
-			tableView.separatorStyle = .singleLine
-			tableView.backgroundView = nil
-		}
+		tableView.showHideNoDataLabel(noDataLabel: noDataLabel!, show: addStaffMemberVC?.services.count ?? 0 == 0)
 		return 1
 	}
 	
@@ -165,7 +163,9 @@ extension AssignServicesViewController: UITableViewDataSource, UITableViewDelega
 			cell.tapToEnableLabel.isHidden = !cell.tapToEnableLabel.isHidden
 			updateAssignedServices()
 		} else {
-			Alerts.showTwoOptionAlertDestructive(title: "Edit Confirmation", message: "Are you sure you want to unassign \(addStaffMemberVC?.staffMember?.firstName ?? "this staff member") from \(addStaffMemberVC?.services[indexPath.row].name ?? "this service")?", sender: self, option1: "Unassign", option2: "Cancel", is1Destructive: true, is2Destructive: false, handler1: { (_) in
+			let staffMemberName = addStaffMemberVC?.staffMember?.firstName ?? "this staff member"
+			let serviceName = addStaffMemberVC?.services[indexPath.row].name ?? "this service"
+			Alerts.showTwoOptionAlertDestructive(title: "Unassign \(staffMemberName) from \(serviceName)?", message: "This will reset any staff specific details you may have set for when \(staffMemberName) performs \(serviceName)", sender: self, option1: "Unassign", option2: "Cancel", is1Destructive: true, is2Destructive: false, handler1: { (_) in
 				
 				self.enabled[indexPath.row] = !self.enabled[indexPath.row]
 				cell.checkmark.isHidden = !cell.checkmark.isHidden

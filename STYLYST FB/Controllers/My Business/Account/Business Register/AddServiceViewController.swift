@@ -215,7 +215,8 @@ class AddServiceViewController: UIViewController {
 							  defaultPrice: defaultPrice,
 							  specificPrices: specificPrices ?? [String : Double](),
 							  defaultTime: defaultTime,
-							  specificTimes: specificTimes ?? [String : String]())
+							  specificTimes: specificTimes ?? [String : String](),
+							  assignedStaff: assignedStaff)
 		
 		if isEditService {
 			servicesVC?.services[selectedIndex] = service

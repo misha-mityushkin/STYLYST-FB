@@ -36,8 +36,9 @@ class BusinessRegisterViewController: UIViewController {
     @IBOutlet weak var chooseImg4: UIButton!
     @IBOutlet weak var img5: UIImageView!
     @IBOutlet weak var chooseImg5: UIButton!
-        
-    @IBOutlet weak var introParagraphTextField: UITextField!
+	@IBOutlet weak var atLeastOneImageInstructionsLabel: UILabel!
+	
+	@IBOutlet weak var businessDescriptionTextView: UITextView!
 	
 	@IBOutlet weak var businessTypePickerView: UIPickerView!
 	@IBOutlet weak var businessTypeSelectionLabel: UILabel!
@@ -51,7 +52,7 @@ class BusinessRegisterViewController: UIViewController {
 	
     
     var textFields: [UITextField] = []
-    var textFieldsHoldAlert = [false, false, false, false]
+    var textFieldsHoldAlert = [false, false, false]
     
     var spinnerView = LoadingView()
     
@@ -103,21 +104,22 @@ class BusinessRegisterViewController: UIViewController {
             isModalInPresentation = true
             placeholderImage = UIImage(systemName: K.ImageNames.photoPlaceholder)
         }
-		        
-        textFields = [locationNameTextField, contactNumberTextField, contactEmailTextField, introParagraphTextField]
+		
+        textFields = [locationNameTextField, contactNumberTextField, contactEmailTextField]
         for textField in textFields {
             textField.delegate = self
         }
         UITextField.format(textFields: textFields, height: 40, padding: 10)
+		businessDescriptionTextView.delegate = self
 		
         imageViews = [img1, img2, img3, img4, img5]
         for imageView in imageViews {
             imageView.image = placeholderImage
         }
         chooseImageButtons = [chooseImg1, chooseImg2, chooseImg3, chooseImg4, chooseImg5]
-		
-		businessTypePickerView.dataSource = self
-		businessTypePickerView.delegate = self
+		for i in 0..<chooseImageButtons.count {
+			chooseImageButtons[i].tag = i
+		}
 		
 		loadSubscriptionPlans()
 		
@@ -127,7 +129,7 @@ class BusinessRegisterViewController: UIViewController {
 			manageBusinessHoursButton.setTitle("Edit Hours", for: .normal)
 			manageStaffButton.setTitle("Edit Staff", for: .normal)
 			manageServicesButton.setTitle("Edit Services", for: .normal)
-			finishButton.setTitle("Save", for: .normal)
+			finishButton.setTitle("Save Changes", for: .normal)
 		} else {
 			titleLabel.text = "Add Business"
 		}
@@ -149,6 +151,9 @@ class BusinessRegisterViewController: UIViewController {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorLight
         navigationController?.makeTransparent()
+		print("VIEWDIDAPPEAR")
+		businessDescriptionTextView.delegate = self
+		businessDescriptionTextView.placeholder = "Business description"
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -179,9 +184,7 @@ class BusinessRegisterViewController: UIViewController {
 						subscriptionPlans.append(SubscriptionPlan(name: document.documentID, price: price, numStaff: numStaff, numStaffDisplay: numStaffDisplay))
 					}
 				}
-				subscriptionPlans.sort { (plan1, plan2) -> Bool in
-					return plan1.price < plan2.price
-				}
+				subscriptionPlans.sort()
 				self.subscriptionPlans = subscriptionPlans
 				var planNames: [String] = []
 				for plan in subscriptionPlans {
@@ -211,6 +214,7 @@ class BusinessRegisterViewController: UIViewController {
     
     
     func loadDataFromBusinessLocation() {
+		print("SETTEXT")
         if let businessLocation = businessLocation {
             locationNameTextField.text = businessLocation.name
             contactNumberTextField.text = Helpers.format(phoneNumber: businessLocation.phoneNumber)
@@ -228,14 +232,11 @@ class BusinessRegisterViewController: UIViewController {
                 chooseImageButtons[i].setTitleColor(.systemRed, for: .normal)
                 imageExists[i] = true
             }
-            introParagraphTextField.text = businessLocation.introParagraph
+			businessDescriptionTextView.text = businessLocation.introParagraph
 			
-			for i in 0..<K.Collections.businessTypeEnums.count {
-				if K.Collections.businessTypeEnums[i] == businessLocation.businessType {
-					businessTypePickerView.selectRow(i + 1, inComponent: 0, animated: false)
-					businessTypeSelectionLabel.text = "Selected: \(K.Collections.businessTypes[i + 1])"
-				}
-			}
+			let businessTypeIndex = Int(K.Collections.businessTypeEnums.firstIndex(of: businessLocation.businessType) ?? -1)
+			businessTypePickerView.selectRow(businessTypeIndex + 1, inComponent: 0, animated: false)
+			businessTypeSelectionLabel.text = businessTypeIndex == -1 ? "Not Selected" : "Selected: \(K.Collections.businessTypes[businessTypeIndex])"
 			
 			services = businessLocation.services
 			serviceCategories = businessLocation.serviceCategories
@@ -263,7 +264,10 @@ class BusinessRegisterViewController: UIViewController {
 					self.dismiss(animated: true, completion: nil)
 				}
 			}
-        }
+		} else {
+			//businessDescriptionTextView.text = "Business description"
+		}
+		//businessDescriptionTextView.placeholder = "Business description"
     }
     
     
@@ -325,88 +329,31 @@ class BusinessRegisterViewController: UIViewController {
 		performSegue(withIdentifier: K.Segues.registerBusinessToAddServices, sender: self)
 	}
 	
-	
     func setLocation(location: MKMapItem) {
         self.location = location
         selectedLocationLabel.text = Helpers.parseAddress(for: location.placemark)
         selectedLocationLabel.textColor = K.Colors.goldenThemeColorInverse
         chooseLocationButton.setTitle("Change Location", for: .normal)
     }
-    
-    
-    @IBAction func chooseImg1Pressed(_ sender: UIButton) {
-        if imageExists[0] {
+	
+	@IBAction func chooseRemoveImagePressed(_ sender: UIButton) {
+		chooseRemoveImage(index: sender.tag)
+	}
+	
+	func chooseRemoveImage(index i: Int) {
+		if imageExists[i] {
 			changedImages = true
-			img1.contentMode = .scaleAspectFit
-            img1.image = placeholderImage
-            chooseImg1.setTitle("Choose", for: .normal)
-            chooseImg1.setTitleColor(.black, for: .normal)
-            imageExists[0] = false
-        } else {
+			imageViews[i].contentMode = .scaleAspectFit
+			imageViews[i].image = placeholderImage
+			chooseImageButtons[i].setTitle("Choose", for: .normal)
+			chooseImageButtons[i].setTitleColor(.black, for: .normal)
+			imageExists[i] = false
+		} else {
 			spinnerView.create(parentVC: self)
-            selectedImage = 0
-            showImagePickerController()
-        }
-    }
-    @IBAction func chooseImg2Pressed(_ sender: UIButton) {
-        if imageExists[1] {
-			changedImages = true
-			img2.contentMode = .scaleAspectFit
-            img2.image = placeholderImage
-            chooseImg2.setTitle("Choose", for: .normal)
-            chooseImg2.setTitleColor(.black, for: .normal)
-            imageExists[1] = false
-        } else {
-			spinnerView.create(parentVC: self)
-            selectedImage = 1
-            showImagePickerController()
-        }
-    }
-    @IBAction func chooseImg3Pressed(_ sender: UIButton) {
-        if imageExists[2] {
-			changedImages = true
-			img3.contentMode = .scaleAspectFit
-            img3.image = placeholderImage
-            chooseImg3.setTitle("Choose", for: .normal)
-            chooseImg3.setTitleColor(.black, for: .normal)
-            imageExists[2] = false
-        } else {
-			spinnerView.create(parentVC: self)
-            selectedImage = 2
-            showImagePickerController()
-        }
-    }
-    @IBAction func chooseImg4Pressed(_ sender: UIButton) {
-        if imageExists[3] {
-			changedImages = true
-			img4.contentMode = .scaleAspectFit
-            img4.image = placeholderImage
-            chooseImg4.setTitle("Choose", for: .normal)
-            chooseImg4.setTitleColor(.black, for: .normal)
-            imageExists[3] = false
-        } else {
-			spinnerView.create(parentVC: self)
-            selectedImage = 3
-            showImagePickerController()
-        }
-    }
-    @IBAction func chooseImg5Pressed(_ sender: UIButton) {
-        if imageExists[4] {
-			changedImages = true
-			img5.contentMode = .scaleAspectFit
-            img5.image = placeholderImage
-            chooseImg5.setTitle("Choose", for: .normal)
-            chooseImg5.setTitleColor(.black, for: .normal)
-            imageExists[4] = false
-        } else {
-			spinnerView.create(parentVC: self)
-            selectedImage = 4
-            showImagePickerController()
-        }
-    }
-    
-    
-    
+			selectedImage = i
+			showImagePickerController()
+		}
+	}
     
     @IBAction func continuePressed(_ sender: UIButton) {
 		if isEditBusiness {
@@ -443,6 +390,7 @@ class BusinessRegisterViewController: UIViewController {
 			isValid = false
 			textFieldsHoldAlert[0] = true
 		}
+		
 		if let phoneNumber = contactNumberTextField.text, !phoneNumber.isEmpty {
 			if !phoneNumber.isValidPhoneNumber(isFormatted: true) {
 				contactNumberTextField.text = ""
@@ -455,6 +403,7 @@ class BusinessRegisterViewController: UIViewController {
 			isValid = false
 			textFieldsHoldAlert[1] = true
 		}
+		
 		if let email = contactEmailTextField.text, !email.isEmpty {
 			if !email.isValidEmail() {
 				contactEmailTextField.text = ""
@@ -467,9 +416,10 @@ class BusinessRegisterViewController: UIViewController {
 			isValid = false
 			textFieldsHoldAlert[2] = true
 		}
+		
 		if let location = location {
 			if !isEditBusiness || isNewLocation {
-				if Helpers.parseAddress(for: location.placemark).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+				if Helpers.parseAddress(for: location.placemark).isEmptyOrWhitespace() {
 					isValid = false
 					Alerts.showNoOptionAlert(title: "Error loading address for location", message: "An unknown error occurred and we were unable to find the address of the location you selected. Please try using the full address instead of the common location name", sender: self)
 					selectedLocationLabel.text = "Error loading location"
@@ -478,76 +428,41 @@ class BusinessRegisterViewController: UIViewController {
 			}
 		} else {
 			isValid = false
-			selectedLocationLabel.text = "You must select a location!"
+			selectedLocationLabel.text = "You must select a location"
 			selectedLocationLabel.textColor = .systemRed
 		}
 		
-		if let image1 = img1.image, image1 != placeholderImage {
-			images.append(image1)
-			if let data = image1.jpegData(compressionQuality: compressionQuality) {
-				imagesData.append(data)
-			} else {
-				Alerts.showNoOptionAlert(title: "Error loading image data", message: "An error has occurred while loading the image data for image 1. Please try again", sender: self)
-				isValid = false
+		for i in 0..<imageViews.count {
+			let imageView = imageViews[i]
+			if let image = imageView.image, image != placeholderImage {
+				if let data = image.jpegData(compressionQuality: compressionQuality) {
+					images.append(image)
+					imagesData.append(data)
+				} else {
+					Alerts.showNoOptionAlert(title: "Error loading image data", message: "An error has occurred while loading the image data for image \(i + 1). Please try reselecting it again", sender: self)
+					isValid = false
+				}
 			}
 		}
-		if let image2 = img2.image, image2 != placeholderImage {
-			images.append(image2)
-			if let data = image2.jpegData(compressionQuality: compressionQuality) {
-				imagesData.append(data)
-			} else {
-				Alerts.showNoOptionAlert(title: "Error loading image data", message: "An error has occurred while loading the image data for image 2. Please try again", sender: self)
-				isValid = false
-			}
-		}
-		if let image3 = img3.image, image3 != placeholderImage {
-			images.append(image3)
-			if let data = image3.jpegData(compressionQuality: compressionQuality) {
-				imagesData.append(data)
-			} else {
-				Alerts.showNoOptionAlert(title: "Error loading image data", message: "An error has occurred while loading the image data for image 3. Please try again", sender: self)
-				isValid = false
-			}
-		}
-		if let image4 = img4.image, image4 != placeholderImage {
-			images.append(image4)
-			if let data = image4.jpegData(compressionQuality: compressionQuality) {
-				imagesData.append(data)
-			} else {
-				Alerts.showNoOptionAlert(title: "Error loading image data", message: "An error has occurred while loading the image data for image 4. Please try again", sender: self)
-				isValid = false
-			}
-		}
-		if let image5 = img5.image, image5 != placeholderImage {
-			images.append(image5)
-			if let data = image5.jpegData(compressionQuality: compressionQuality) {
-				imagesData.append(data)
-			} else {
-				Alerts.showNoOptionAlert(title: "Error loading image data", message: "An error has occurred while loading the image data for image 5. Please try again", sender: self)
-				isValid = false
-			}
-		}
-		
-		if images.isEmpty {
+		if images.isEmpty || imagesData.isEmpty {
 			isValid = false
-			Alerts.showNoOptionAlert(title: "Missing images", message: "You must provide at least one image", sender: self)
-			return
+			atLeastOneImageInstructionsLabel.textColor = .systemRed
 		}
 		
-		if let introParagraph = introParagraphTextField.text, !introParagraph.isEmpty {
+		if let introParagraph = businessDescriptionTextView.text, !introParagraph.isEmpty {
 			if introParagraph.count > 500 {
 				isValid = false
 				Alerts.showNoOptionAlert(title: "Intro paragraph is too long", message: "Your paragraph must be 500 characters or less", sender: self)
 				return
 			}
 		} else {
-			introParagraphTextField.changePlaceholderText(to: "You must provide an intro paragraph!", withColor: .systemRed)
+			businessDescriptionTextView.placeholder = "You must provide an intro paragraph"
+			businessDescriptionTextView.placeholderColor = .systemRed
 			isValid = false
-			textFieldsHoldAlert[3] = true
 		}
 		
-		if K.Collections.businessTypes[businessTypePickerView.selectedRow(inComponent: 0)] == "" {
-			businessTypeSelectionLabel.text = "You must select a business type!"
+		if businessTypePickerView.selectedRow(inComponent: 0) == 0 {
+			businessTypeSelectionLabel.text = "You must select a business type"
 			businessTypeSelectionLabel.textColor = .systemRed
 			isValid = false
 		}
@@ -636,8 +551,9 @@ class BusinessRegisterViewController: UIViewController {
 			guard let phoneNumber = contactNumberTextField.text?.getRawPhoneNumber() else { return }
 			guard let email = contactEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
 			guard let placemark = location?.placemark else { return }
-			guard let paragraph = introParagraphTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !paragraph.isEmpty else { return }
-			let businessTypeIdentifier = K.Collections.businessTypeIdentifiers[businessTypePickerView.selectedRow(inComponent: 0) - 1]
+			guard let paragraph = businessDescriptionTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines), !paragraph.isEmpty else { return }
+			let businessTypeSelectedRow = businessTypePickerView.selectedRow(inComponent: 0)
+			let businessTypeIdentifier = K.Collections.businessTypeIdentifiers[businessTypeSelectedRow - 1]
 			let planName = subscriptionPlans![planTypeSegmentedControl.selectedSegmentIndex].name
 			var staffUserIDs: [String] = []
 			for staffMember in staffMembers {
@@ -659,14 +575,15 @@ class BusinessRegisterViewController: UIViewController {
 			let lat = placemark.coordinate.latitude
 			let lon = placemark.coordinate.longitude
 			
-			var strings: [String] = []
+			var keywordStrings: [String] = []
+			keywordStrings.append(contentsOf: serviceCategories)
 			for service in services {
 				servicesData.append(service.getServiceData())
-				strings.append(service.name)
+				keywordStrings.append(service.name)
 			}
-			strings.append(locationName)
-			strings.append(K.Collections.businessTypes[businessTypePickerView.selectedRow(inComponent: 0)])
-			let keywords = Helpers.getKeywords(forArray: strings)
+			keywordStrings.append(locationName)
+			keywordStrings.append(K.Collections.businessTypes[businessTypeSelectedRow - 1])
+			let separatedKeywords = Helpers.getKeywords(forArray: keywordStrings)
 			//print(keywords)
 			
 			//image names
@@ -711,7 +628,7 @@ class BusinessRegisterViewController: UIViewController {
 								K.Firebase.PlacesFieldNames.specificHours: specificHours ?? [String : String](),
 								K.Firebase.PlacesFieldNames.staffWeeklyHours: staffWeeklyHours ?? [String : [String : [String]]](),
 								K.Firebase.PlacesFieldNames.staffSpecificHours: staffSpecificHours ?? [String : [String : [String]]](),
-								K.Firebase.PlacesFieldNames.keywords: keywords
+								K.Firebase.PlacesFieldNames.keywords: separatedKeywords
 							], completion: { (error) in
 								if let error = error {
 									self.spinnerView.remove()
@@ -754,7 +671,7 @@ class BusinessRegisterViewController: UIViewController {
 								K.Firebase.PlacesFieldNames.specificHours: specificHours ?? [String : String](),
 								K.Firebase.PlacesFieldNames.staffWeeklyHours: staffWeeklyHours ?? [String : [String : [String]]](),
 								K.Firebase.PlacesFieldNames.staffSpecificHours: staffSpecificHours ?? [String : [String : [String]]](),
-								K.Firebase.PlacesFieldNames.keywords: keywords
+								K.Firebase.PlacesFieldNames.keywords: separatedKeywords
 							], completion: { (error) in
 								if let error = error {
 									self.spinnerView.remove()
@@ -821,7 +738,7 @@ class BusinessRegisterViewController: UIViewController {
 						K.Firebase.PlacesFieldNames.specificHours: specificHours ?? [String : String](),
 						K.Firebase.PlacesFieldNames.staffWeeklyHours: staffWeeklyHours ?? [String : [String : [String]]](),
 						K.Firebase.PlacesFieldNames.staffSpecificHours: staffSpecificHours ?? [String : [String : [String]]](),
-						K.Firebase.PlacesFieldNames.keywords: keywords
+						K.Firebase.PlacesFieldNames.keywords: separatedKeywords
 					]) { (error) in
 						if error == nil {
 							self.addBusinessRefToUser(usingDatabase: db, toUserWithID: uid, geoFirestore: geoFirestore, geoPoint: GeoPoint(latitude: lat, longitude: lon))
@@ -1202,8 +1119,6 @@ extension BusinessRegisterViewController: UITextFieldDelegate {
             textField.changePlaceholderText(to: "Contact Number")
         } else if textField == contactEmailTextField {
             textField.changePlaceholderText(to: "Contact Email")
-        } else if textField == introParagraphTextField {
-            textField.changePlaceholderText(to: "Business description")
         }
     }
     
@@ -1217,11 +1132,6 @@ extension BusinessRegisterViewController: UITextFieldDelegate {
                 textField.text = Helpers.format(phoneNumber: fullString)
             }
             return false
-        } else if textField == introParagraphTextField {
-            let maxLength = 500
-            let currentString: NSString = textField.text! as NSString
-            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
-            return newString.length <= maxLength
         }
         return true
     }
@@ -1232,7 +1142,33 @@ extension BusinessRegisterViewController: UITextFieldDelegate {
 
 
 
-
+extension BusinessRegisterViewController: UITextViewDelegate {
+	
+	func textViewDidBeginEditing(_ textView: UITextView) {
+		if textView == businessDescriptionTextView {
+			textView.resizePlaceholder()
+			textView.placeholder = "Business description"
+			textView.placeholderColor = K.Colors.placeholderTextColor
+		}
+	}
+	
+	func textViewDidChange(_ textView: UITextView) {
+		if textView == businessDescriptionTextView {
+			textView.updatePlaceholder()
+		}
+	}
+	
+	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		if textView == businessDescriptionTextView {
+			let maxLength = 500
+			let currentString: NSString = textView.text! as NSString
+			let newString: NSString = currentString.replacingCharacters(in: range, with: text) as NSString
+			return newString.length <= maxLength
+		}
+		return true
+	}
+	
+}
 
 
 
@@ -1249,76 +1185,20 @@ extension BusinessRegisterViewController: UIImagePickerControllerDelegate, UINav
         }
     }
     
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            switch selectedImage {
-                case 0:
-					img1.contentMode = .scaleAspectFill
-                    img1.image = editedImage
-                    chooseImg1.setTitle("Remove", for: .normal)
-                    chooseImg1.setTitleColor(.systemRed, for: .normal)
-                case 1:
-					img2.contentMode = .scaleAspectFill
-                    img2.image = editedImage
-                    chooseImg2.setTitle("Remove", for: .normal)
-                    chooseImg2.setTitleColor(.systemRed, for: .normal)
-                case 2:
-					img3.contentMode = .scaleAspectFill
-                    img3.image = editedImage
-                    chooseImg3.setTitle("Remove", for: .normal)
-                    chooseImg3.setTitleColor(.systemRed, for: .normal)
-                case 3:
-					img4.contentMode = .scaleAspectFill
-                    img4.image = editedImage
-                    chooseImg4.setTitle("Remove", for: .normal)
-                    chooseImg4.setTitleColor(.systemRed, for: .normal)
-                case 4:
-					img5.contentMode = .scaleAspectFill
-                    img5.image = editedImage
-                    chooseImg5.setTitle("Remove", for: .normal)
-                    chooseImg5.setTitleColor(.systemRed, for: .normal)
-                default: break
-            }
-            imageExists[selectedImage] = true
+		if let newImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage ?? info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+			imageViews[selectedImage].contentMode = .scaleAspectFill
+			imageViews[selectedImage].image = newImage
+			chooseImageButtons[selectedImage].setTitle("Remove", for: .normal)
+			chooseImageButtons[selectedImage].setTitleColor(.systemRed, for: .normal)
+			
+			imageExists[selectedImage] = true
 			changedImages = true
-        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            switch selectedImage {
-                case 0:
-					img1.contentMode = .scaleAspectFill
-                    img1.image = originalImage
-                    chooseImg1.setTitle("Remove", for: .normal)
-                    chooseImg1.setTitleColor(.systemRed, for: .normal)
-                case 1:
-					img2.contentMode = .scaleAspectFill
-                    img2.image = originalImage
-                    chooseImg2.setTitle("Remove", for: .normal)
-                    chooseImg2.setTitleColor(.systemRed, for: .normal)
-                case 2:
-					img3.contentMode = .scaleAspectFill
-                    img3.image = originalImage
-                    chooseImg3.setTitle("Remove", for: .normal)
-                    chooseImg3.setTitleColor(.systemRed, for: .normal)
-                case 3:
-					img4.contentMode = .scaleAspectFill
-                    img4.image = originalImage
-                    chooseImg4.setTitle("Remove", for: .normal)
-                    chooseImg4.setTitleColor(.systemRed, for: .normal)
-                case 4:
-					img5.contentMode = .scaleAspectFill
-                    img5.image = originalImage
-                    chooseImg5.setTitle("Remove", for: .normal)
-                    chooseImg5.setTitleColor(.systemRed, for: .normal)
-                default: break
-            }
-            imageExists[selectedImage] = true
-			changedImages = true
-        }
-        
+			atLeastOneImageInstructionsLabel.textColor = K.Colors.goldenThemeColorDefault
+		}
         dismiss(animated: true, completion: nil)
-        
     }
+	
 }
 
 
@@ -1328,20 +1208,25 @@ extension BusinessRegisterViewController: UIPickerViewDataSource, UIPickerViewDe
 	func numberOfComponents(in pickerView: UIPickerView) -> Int {
 		return 1
 	}
+	
 	func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-		return K.Collections.businessTypes.count
+		return K.Collections.businessTypes.count + 1
 	}
 
 	func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-		return NSAttributedString(string: K.Collections.businessTypes[row], attributes: [NSAttributedString.Key.foregroundColor: K.Colors.goldenThemeColorDefault ?? UIColor.black])
+		if row == 0 {
+			return NSAttributedString(string: "Not Selected", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemRed.withAlphaComponent(0.8)])
+		} else {
+			return NSAttributedString(string: K.Collections.businessTypes[row - 1], attributes: [NSAttributedString.Key.foregroundColor: K.Colors.goldenThemeColorDefault ?? UIColor.black])
+		}
 	}
 
 	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 		businessTypeSelectionLabel.textColor = K.Colors.goldenThemeColorDefault
-		if K.Collections.businessTypes[row].isEmpty {
-			businessTypeSelectionLabel.text = "Selected: None"
+		if row == 0 {
+			businessTypeSelectionLabel.text = "Not Selected"
 		} else {
-			businessTypeSelectionLabel.text = "Selected: \(K.Collections.businessTypes[row])"
+			businessTypeSelectionLabel.text = "Selected: \(K.Collections.businessTypes[row - 1])"
 		}
 	}
 
@@ -1352,7 +1237,6 @@ extension BusinessRegisterViewController: UIPickerViewDataSource, UIPickerViewDe
 extension BusinessRegisterViewController: UIScrollViewDelegate {
 
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		
 		if scrollView.contentOffset.y >= titleLabel.frame.maxY {
 			if navigationItem.title != titleLabel.text {
 				navigationItem.title = titleLabel.text

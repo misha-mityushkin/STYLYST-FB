@@ -144,26 +144,24 @@ class SpecificServiceDetailsViewController: UIViewController {
 	
 	@IBAction func resetPressed(_ sender: UIButton) {
 		reset = true
-		Alerts.showTwoOptionAlert(title: "Reset Specific Details?", message: "Are you sure you want to reset these specific details to their defaults?", option1: "Reset", option2: "Cancel", sender: self, handler1: { (_) in
-			if let assignStaffVC = self.assignStaffVC {
-				self.priceTextField.text = String(format: "$%.02f", assignStaffVC.addServiceVC?.defaultPrice ?? 0)
-				self.timeTextField.text = "\(assignStaffVC.addServiceVC?.defaultTime ?? "0h 0min")"
-				if self.isValidInformation() {
-					self.saveDetails()
-				}
-			} else if let assignServicesVC = self.assignServicesVC {
-				let service = assignServicesVC.addStaffMemberVC?.services[assignServicesVC.selectedIndex]
-				self.priceTextField.text = String(format: "$%.02f", service?.defaultPrice ?? 0)
-				self.timeTextField.text = "\(service?.defaultTime ?? "0h 0min")"
-				if self.isValidInformation() {
-					self.saveDetails()
-				}
-			} else {
-				Alerts.showNoOptionAlert(title: "Unknown Error Occurred", message: "Please restart the app and try again", sender: self) { (_) in
-					self.dismiss(animated: true, completion: nil)
-				}
+		if let assignStaffVC = self.assignStaffVC {
+			self.priceTextField.text = String(format: "$%.02f", assignStaffVC.addServiceVC?.defaultPrice ?? 0)
+			self.timeTextField.text = "\(assignStaffVC.addServiceVC?.defaultTime ?? "0h 0min")"
+			if self.isValidInformation() {
+				self.saveDetails()
 			}
-		}, handler2: nil)
+		} else if let assignServicesVC = self.assignServicesVC {
+			let service = assignServicesVC.addStaffMemberVC?.services[assignServicesVC.selectedIndex]
+			self.priceTextField.text = String(format: "$%.02f", service?.defaultPrice ?? 0)
+			self.timeTextField.text = "\(service?.defaultTime ?? "0h 0min")"
+			if self.isValidInformation() {
+				self.saveDetails()
+			}
+		} else {
+			Alerts.showNoOptionAlert(title: "Unknown Error Occurred", message: "Please restart the app and try again", sender: self) { (_) in
+				self.dismiss(animated: true, completion: nil)
+			}
+		}
 	}
 	
 	
@@ -207,9 +205,7 @@ class SpecificServiceDetailsViewController: UIViewController {
 	
 	@IBAction func savePressed(_ sender: UIButton) {
 		reset = false
-		Alerts.showTwoOptionAlert(title: "Edit Confirmation", message: "Are you sure you want to apply these changes?", option1: "Confirm", option2: "Cancel", sender: self, handler1: { (_) in
-			self.saveDetails()
-		}, handler2: nil)
+		saveDetails()
 	}
 	
 	func saveDetails() {
@@ -235,11 +231,11 @@ class SpecificServiceDetailsViewController: UIViewController {
 					}
 					
 					if reset {
-						Alerts.showNoOptionAlert(title: "Details Reset to Defaults", message: "The specific details for \"\(assignStaffVC.addServiceVC?.name ?? "this service")\" have been reset for \(staffMember.firstName) \(staffMember.lastName). It now takes \(time) and costs \(String(format: "$%.02f", price))", sender: self) { (_) in
+						Alerts.showNoOptionAlert(title: "Details Reset to Defaults", message: "The specific details for \(assignStaffVC.addServiceVC?.name ?? "this service") have been reset for \(staffMember.firstName). It now takes \(time) and costs \(String(format: "$%.02f", price))", sender: self) { (_) in
 							self.dismiss(animated: true, completion: nil)
 						}
 					} else {
-						Alerts.showNoOptionAlert(title: "Details Updated", message: "\"\(assignStaffVC.addServiceVC?.name ?? "This service")\" now takes \(time) and costs \(String(format: "$%.02f", price)) specifically for \(staffMember.firstName) \(staffMember.lastName)", sender: self) { (_) in
+						Alerts.showNoOptionAlert(title: "Details Updated", message: "\"\(assignStaffVC.addServiceVC?.name ?? "This service")\" now takes \(time) and costs \(String(format: "$%.02f", price)) specifically for \(staffMember.firstName)", sender: self) { (_) in
 							self.dismiss(animated: true, completion: nil)
 						}
 					}
@@ -309,9 +305,9 @@ extension SpecificServiceDetailsViewController: UITextFieldDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 		if textField == priceTextField {
-			textField.changePlaceholderText(to: "Price")
+			textField.changePlaceholderText(to: "Specific Price")
 		} else if textField == timeTextField {
-			textField.changePlaceholderText(to: "Elapsed time")
+			textField.changePlaceholderText(to: "Specific Elapsed Time")
 		}
 	}
 }

@@ -22,7 +22,7 @@ class HoursOfOperationViewController: UIViewController {
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorDefault
+		navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorInverse
 		UIView.animate(withDuration: 0.5) {
 			self.navigationItem.leftBarButtonItem?.tintColor = K.Colors.goldenThemeColorLight?.withAlphaComponent(1)
 			self.navigationController?.makeTransparent()
@@ -33,7 +33,7 @@ class HoursOfOperationViewController: UIViewController {
 	}
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorLight
+		navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorInverse
 		navigationController?.makeTransparent()
 	}
 	

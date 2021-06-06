@@ -71,11 +71,7 @@ class BusinessLocation {
 		if self.serviceCategories.isEmpty {
 			self.serviceCategories = [Service.NO_CATEGORY]
 		}
-		self.services = []
-		let servicesData = data?[K.Firebase.PlacesFieldNames.services] as? [[String : Any]] ?? []
-		for serviceData in servicesData {
-			self.services.append(Service(serviceData: serviceData))
-		}
+		self.services = Helpers.parseServicesArray(servicesData: data?[K.Firebase.PlacesFieldNames.services] as? [[String : Any]] ?? [])
 		
 		self.weeklyHours = data?[K.Firebase.PlacesFieldNames.weeklyHours] as? [String : String]
 		self.specificHours = data?[K.Firebase.PlacesFieldNames.specificHours] as? [String : String]

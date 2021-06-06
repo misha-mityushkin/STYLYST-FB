@@ -11,7 +11,7 @@ import UIKit
 struct K {
 	
 	struct Collections {
-		static let businessTypes = ["", "Barbershop", "Hair Salon", "Nail Salon", "Beauty Salon", "Spa", "Other"]
+		static let businessTypes = ["Barbershop", "Hair Salon", "Nail Salon", "Beauty Salon", "Spa", "Other"]
 		static let businessTypeIdentifiers = ["barberShop", "hairSalon", "nailSalon", "beautySalon", "spa", "other"]
 		static let businessTypeEnums = [BusinessType.BarberShop, BusinessType.HairSalon, BusinessType.NailSalon, BusinessType.BeautySalon, BusinessType.Spa, BusinessType.Other]
 		static let daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]

@@ -22,13 +22,13 @@ class SpecificDatesTableViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		tableView.backgroundView = UIImageView(image: K.Images.backgroundNoLogo)
+		noDataLabel = addNoDataLabel(withText: "No specific dates added yet. Tap the + icon in the top right corner to add one")
+		tableView.register(UINib(nibName: K.Nibs.specificDateCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.specificDateCellIdentifier)
+		tableView.tableFooterView = UIView()
+		
 		specificDates = hoursOfOperationVC?.businessRegisterVC?.specificHours
 		updateSpecificDates()
-		
-		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No specific dates added yet. Tap the + icon in the top right corner to add one")
-		
-		tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
-		tableView.register(UINib(nibName: K.Nibs.specificDateCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.specificDateCellIdentifier)
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -59,16 +59,7 @@ class SpecificDatesTableViewController: UITableViewController {
 	// MARK: - Table view data source
 	
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		if hoursOfOperationVC?.businessRegisterVC?.specificHours?.count ?? 0 == 0 {
-			if let noDataLabel = noDataLabel {
-				noDataLabel.isHidden = false
-				tableView.backgroundView?.addSubview(noDataLabel)
-			}
-			tableView.separatorStyle = .none
-		} else {
-			tableView.separatorStyle = .singleLine
-			tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
-		}
+		showHideNoDataLabel(noDataLabel: noDataLabel!, show: hoursOfOperationVC?.businessRegisterVC?.specificHours?.count ?? 0 == 0)
 		return 1
 	}
 	

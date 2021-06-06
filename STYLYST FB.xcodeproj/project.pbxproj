@@ -83,6 +83,8 @@
 		CCB599C3250090B3003CAFA8 /* PersonalCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB599C2250090B3003CAFA8 /* PersonalCodeViewController.swift */; };
 		CCC450E825031D4A009CFC5F /* StaffWeekdayScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC450E725031D4A009CFC5F /* StaffWeekdayScheduleViewController.swift */; };
 		CCC450EC25031E65009CFC5F /* StaffSpecificDatesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC450EB25031E65009CFC5F /* StaffSpecificDatesTableViewController.swift */; };
+		CCC6CA892666057C0006AA4E /* TableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC6CA882666057C0006AA4E /* TableViewExtension.swift */; };
+		CCC6CA8B266606560006AA4E /* TableViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC6CA8A266606560006AA4E /* TableViewControllerExtension.swift */; };
 		CCD7C2F5264B62D7001EB590 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD7C2F4264B62D7001EB590 /* Service.swift */; };
 		CCD7C2F7264B7C85001EB590 /* WeeklyHours.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD7C2F6264B7C85001EB590 /* WeeklyHours.swift */; };
 		CCD922EE24C9125F00AAEB70 /* ServicesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD922EC24C9125F00AAEB70 /* ServicesTableViewCell.swift */; };
@@ -92,6 +94,7 @@
 		CCDFBEFC24E3861F00B6066D /* SpecificServiceDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDFBEFB24E3861F00B6066D /* SpecificServiceDetailsViewController.swift */; };
 		CCE0CE7324DA31E000D90341 /* AssignStaffTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE0CE7124DA31DF00D90341 /* AssignStaffTableViewCell.swift */; };
 		CCE0CE7624DA583300D90341 /* AssignStaffMembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE0CE7524DA583300D90341 /* AssignStaffMembersViewController.swift */; };
+		CCE4308C266890C2001887E7 /* TextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE4308B266890C2001887E7 /* TextViewExtension.swift */; };
 		CCE72C5524D8F75800908068 /* AssignServicesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE72C5324D8F75800908068 /* AssignServicesTableViewCell.swift */; };
 		CCE72C5624D8F75800908068 /* AssignServicesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CCE72C5424D8F75800908068 /* AssignServicesTableViewCell.xib */; };
 		CCF83E7924EF29DD00DCEA8D /* SubscriptionPlansViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF83E7824EF29DD00DCEA8D /* SubscriptionPlansViewController.swift */; };
@@ -178,6 +181,8 @@
 		CCB599C2250090B3003CAFA8 /* PersonalCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCodeViewController.swift; sourceTree = "<group>"; };
 		CCC450E725031D4A009CFC5F /* StaffWeekdayScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffWeekdayScheduleViewController.swift; sourceTree = "<group>"; };
 		CCC450EB25031E65009CFC5F /* StaffSpecificDatesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSpecificDatesTableViewController.swift; sourceTree = "<group>"; };
+		CCC6CA882666057C0006AA4E /* TableViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewExtension.swift; sourceTree = "<group>"; };
+		CCC6CA8A266606560006AA4E /* TableViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewControllerExtension.swift; sourceTree = "<group>"; };
 		CCD7C2F4264B62D7001EB590 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		CCD7C2F6264B7C85001EB590 /* WeeklyHours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyHours.swift; sourceTree = "<group>"; };
 		CCD922EC24C9125F00AAEB70 /* ServicesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesTableViewCell.swift; sourceTree = "<group>"; };
@@ -188,6 +193,7 @@
 		CCE0CE7124DA31DF00D90341 /* AssignStaffTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignStaffTableViewCell.swift; sourceTree = "<group>"; };
 		CCE0CE7224DA31DF00D90341 /* AssignStaffTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssignStaffTableViewCell.xib; sourceTree = "<group>"; };
 		CCE0CE7524DA583300D90341 /* AssignStaffMembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignStaffMembersViewController.swift; sourceTree = "<group>"; };
+		CCE4308B266890C2001887E7 /* TextViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewExtension.swift; sourceTree = "<group>"; };
 		CCE72C5324D8F75800908068 /* AssignServicesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignServicesTableViewCell.swift; sourceTree = "<group>"; };
 		CCE72C5424D8F75800908068 /* AssignServicesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssignServicesTableViewCell.xib; sourceTree = "<group>"; };
 		CCF83E7824EF29DD00DCEA8D /* SubscriptionPlansViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPlansViewController.swift; sourceTree = "<group>"; };
@@ -446,10 +452,13 @@
 				CCA9D3CE249E8FAA000A0CCE /* SearchBarExtension.swift */,
 				CCA9D3CF249E8FAA000A0CCE /* StringExtension.swift */,
 				CCA9D3D0249E8FAA000A0CCE /* TextFieldExtension.swift */,
+				CCE4308B266890C2001887E7 /* TextViewExtension.swift */,
 				CC21E13924CCC2EA006AC6F5 /* DateExtension.swift */,
 				CCDB541724CCC4590012394D /* NavigationBarExtention.swift */,
 				CC78D0F724D66B95008EB88F /* SegmentedControlExtention.swift */,
 				CCDFBEF924E35DBE00B6066D /* UIImageExtension.swift */,
+				CCC6CA8A266606560006AA4E /* TableViewControllerExtension.swift */,
+				CCC6CA882666057C0006AA4E /* TableViewExtension.swift */,
 				CCA421AB24F18CED008785B9 /* TableViewCellExtension.swift */,
 				CC4FE47E24F2B9A000A797FC /* DatePickerExtension.swift */,
 			);
@@ -617,6 +626,7 @@
 				CCA9D3D6249E8FAA000A0CCE /* String+Extension.swift in Sources */,
 				CC246DF024D7214400455091 /* DoubleExtension.swift in Sources */,
 				CCD7C2F7264B7C85001EB590 /* WeeklyHours.swift in Sources */,
+				CCC6CA8B266606560006AA4E /* TableViewControllerExtension.swift in Sources */,
 				CCA9D3EE249E9335000A0CCE /* FirstLaunchSlideViewController.swift in Sources */,
 				CC8C6C77249F05E500E6239F /* RegisterNavController.swift in Sources */,
 				CCA421AC24F18CED008785B9 /* TableViewCellExtension.swift in Sources */,
@@ -636,7 +646,9 @@
 				CC4FE48424F404F100A797FC /* SpecificDateTableViewCell.swift in Sources */,
 				CCE72C5524D8F75800908068 /* AssignServicesTableViewCell.swift in Sources */,
 				CCA9D3BF249E8D5C000A0CCE /* ContinueRegistrationViewController.swift in Sources */,
+				CCE4308C266890C2001887E7 /* TextViewExtension.swift in Sources */,
 				CC15ABE524D47E70006D19B9 /* AddStaffMemberViewController.swift in Sources */,
+				CCC6CA892666057C0006AA4E /* TableViewExtension.swift in Sources */,
 				CCA9D3D4249E8FAA000A0CCE /* UIColor+Extension.swift in Sources */,
 				CCA9D3D7249E8FAA000A0CCE /* PasswordStrengthType.swift in Sources */,
 				CCB599C3250090B3003CAFA8 /* PersonalCodeViewController.swift in Sources */,

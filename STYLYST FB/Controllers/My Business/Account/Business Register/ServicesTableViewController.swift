@@ -25,11 +25,10 @@ class ServicesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		updateServices()
-		
-		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No services added yet. Tap the + icon in the top right corner to add a service")
-		tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
+		tableView.backgroundView = UIImageView(image: K.Images.backgroundNoLogo)
+		noDataLabel = addNoDataLabel(withText: "No services added yet. Tap the + icon in the top right corner to add a service")
 		tableView.register(UINib(nibName: K.Nibs.servicesCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.servicesCellIdentifier)
+		tableView.tableFooterView = UIView()
 		
 		if #available(iOS 14.0, *) {
 			let children: [UIMenuElement] = [
@@ -46,6 +45,8 @@ class ServicesTableViewController: UITableViewController {
 			addButton.target = self
 			addButton.action = #selector(displayOldContextMenu)
 		}
+		
+		updateServices()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -102,10 +103,15 @@ class ServicesTableViewController: UITableViewController {
 			textField.placeholder = "Eg: Men's Hair"
 			textField.text = oldCategoryName
 		}
+		// Style is .cancel cuz it makes it bold and on the left side
 		alert.addAction(UIAlertAction(title: "Rename", style: .cancel, handler: { [weak alert] (_) in
 			if let newCategoryName = alert?.textFields?[0].text?.trimmingCharacters(in: .whitespacesAndNewlines), !newCategoryName.isEmpty {
 				if self.categories.contains(newCategoryName) && newCategoryName != oldCategoryName {
 					Alerts.showNoOptionAlert(title: "Duplicate Category Name", message: "You already have a category named \(newCategoryName)", sender: self) { _ in
+						self.renameCategory(sender)
+					}
+				} else if newCategoryName == Service.NO_CATEGORY {
+					Alerts.showNoOptionAlert(title: "Category Name Not Allowed", message: "You cannot name your service category \(Service.NO_CATEGORY). This is a system reserved name", sender: self) { _ in
 						self.renameCategory(sender)
 					}
 				} else {
@@ -139,6 +145,10 @@ class ServicesTableViewController: UITableViewController {
 			if let categoryName = alert?.textFields?[0].text?.trimmingCharacters(in: .whitespacesAndNewlines), !categoryName.isEmpty {
 				if self.categories.contains(categoryName) {
 					Alerts.showNoOptionAlert(title: "Duplicate Category Name", message: "You already have a category named \(categoryName)", sender: self) { _ in
+						self.addCategory()
+					}
+				} else if categoryName == Service.NO_CATEGORY {
+					Alerts.showNoOptionAlert(title: "Category Name Not Allowed", message: "You cannot name your service category \(Service.NO_CATEGORY). This is a system reserved name", sender: self) { _ in
 						self.addCategory()
 					}
 				} else {
@@ -181,9 +191,7 @@ class ServicesTableViewController: UITableViewController {
 		categories.sort { category1, category2 in
 			return category1.lowercased() < category2.lowercased()
 		}
-		services.sort(by: { service1, service2 in
-			return service1.name.lowercased() < service2.name.lowercased()
-		})
+		services.sort()
 		categorizeServices()
 		businessRegisterVC?.serviceCategories = categories
 		businessRegisterVC?.services = services
@@ -199,17 +207,7 @@ class ServicesTableViewController: UITableViewController {
 extension ServicesTableViewController {
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		if categories.count == 0 {
-			if let noDataLabel = noDataLabel {
-				noDataLabel.isHidden = false
-				tableView.backgroundView?.addSubview(noDataLabel)
-			}
-			tableView.separatorStyle = .none
-		} else {
-			noDataLabel?.removeFromSuperview()
-			// tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
-			tableView.separatorStyle = .singleLine
-		}
+		showHideNoDataLabel(noDataLabel: noDataLabel!, show: categories.count == 0)
 		return categories.count
 	}
 	
@@ -219,7 +217,7 @@ extension ServicesTableViewController {
 		let label = UILabel(frame: CGRect(x: 12, y: 0, width: tableView.frame.width - 90, height: 40))
 		label.text = categories[section]
 		label.font = UIFont(name: K.FontNames.glacialIndifferenceBold, size: 20)
-		label.textColor = K.Colors.goldenThemeColorLight
+		label.textColor = K.Colors.goldenThemeColorInverse
 		
 		let deleteButton = UIButton(frame: CGRect(x: tableView.frame.width - 50, y: 0, width: 40, height: 40))
 		deleteButton.tag = section
@@ -233,7 +231,7 @@ extension ServicesTableViewController {
 		
 		let renameButton = UIButton(frame: CGRect(x: tableView.frame.width - 90, y: 0, width: 40, height: 40))
 		renameButton.tag = section
-		renameButton.tintColor = K.Colors.goldenThemeColorLight
+		renameButton.tintColor = K.Colors.goldenThemeColorInverse
 		if #available(iOS 13.0, *) {
 			renameButton.setImage(UIImage(systemName: K.ImageNames.pencil), for: .normal)
 		} else {

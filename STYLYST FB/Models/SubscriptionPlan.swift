@@ -14,3 +14,10 @@ struct SubscriptionPlan {
 	var numStaff: Int
 	var numStaffDisplay: String
 }
+
+
+extension SubscriptionPlan: Comparable {
+	static func < (lhs: SubscriptionPlan, rhs: SubscriptionPlan) -> Bool {
+		return lhs.price < rhs.price
+	}
+}

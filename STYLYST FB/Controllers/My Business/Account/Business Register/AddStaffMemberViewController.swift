@@ -62,9 +62,7 @@ class AddStaffMemberViewController: UIViewController {
 		}
 		UITextField.format(textFields: textFields, height: 40, padding: 10)
 		
-		services = (staffMembersVC?.businessRegisterVC?.services ?? []).sorted(by: { service1, service2 in
-			return service1.name < service2.name
-		})
+		services = (staffMembersVC?.businessRegisterVC?.services ?? []).sorted()
 		
 		if isEditStaffMember {
 			titleLabel.text = "Edit Staff Member"

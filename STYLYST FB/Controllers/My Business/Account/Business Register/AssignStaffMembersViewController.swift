@@ -27,18 +27,15 @@ class AssignStaffMembersViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers.sort(by: { user1, user2 in
-			return user1.firstName < user2.firstName
-		})
+		addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers.sort()
 		
 		for staffMember in addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers ?? [] {
 			enabled.append(addServiceVC?.assignedStaff.contains(staffMember.userID) ?? false)
 		}
 		
-		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No staff members found. No worries, you can always assign to staff members after adding your services.")
-		
-		tableView.backgroundView = nil
+		noDataLabel = tableView.addNoDataLabel(withText: "")
 		tableView.register(UINib(nibName: K.Nibs.assignStaffCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.assignStaffCellIdentifier)
+		tableView.tableFooterView = UIView()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +43,15 @@ class AssignStaffMembersViewController: UIViewController {
 		navigationBar.tintColor = .black
 		navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
 	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		// Have to set noDataLabel here for it to get the proper tableview bounds
+		noDataLabel?.removeFromSuperview() // Remove blank label
+		noDataLabel = tableView.addNoDataLabel(withText: "No staff members found. No worries, you can always assign to staff members after adding your services.")
+		tableView.reloadData()
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		if addServiceVC?.assignedStaff.isEmpty ?? true && !(addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers.isEmpty ?? true) {
@@ -113,16 +119,7 @@ class AssignStaffMembersViewController: UIViewController {
 extension AssignStaffMembersViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		if addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers.count == 0 {
-			if let noDataLabel = noDataLabel {
-				noDataLabel.isHidden = false
-				tableView.backgroundView = noDataLabel
-			}
-			tableView.separatorStyle = .none
-		} else {
-			tableView.separatorStyle = .singleLine
-			tableView.backgroundView = nil
-		}
+		tableView.showHideNoDataLabel(noDataLabel: noDataLabel!, show: addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers.count ?? 0 == 0)
 		return 1
 	}
 	
@@ -158,7 +155,9 @@ extension AssignStaffMembersViewController: UITableViewDataSource, UITableViewDe
 			cell.tapToEnableLabel.isHidden = !cell.tapToEnableLabel.isHidden
 			updateAssignedStaff()
 		} else {
-			Alerts.showTwoOptionAlertDestructive(title: "Edit Confirmation", message: "Are you sure you want to unassign \(addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers[indexPath.row].firstName ?? "this staff member") from \(addServiceVC?.name ?? "this service")?", sender: self, option1: "Unassign", option2: "Cancel", is1Destructive: true, is2Destructive: false, handler1: { (_) in
+			let staffMemberName = addServiceVC?.servicesVC?.businessRegisterVC?.staffMembers[indexPath.row].firstName ?? "this staff member"
+			let serviceName = addServiceVC?.name ?? "this service"
+			Alerts.showTwoOptionAlertDestructive(title: "Unassign \(staffMemberName) from \(serviceName)?", message: "This will reset any staff specific details you may have set for when \(staffMemberName) performs \(serviceName)", sender: self, option1: "Unassign", option2: "Cancel", is1Destructive: true, is2Destructive: false, handler1: { (_) in
 				
 				self.enabled[indexPath.row] = !self.enabled[indexPath.row]
 				cell.checkmark.isHidden = !cell.checkmark.isHidden

@@ -36,7 +36,7 @@ class StaffWorkingHoursViewController: UIViewController {
 	}
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorLight
+		navigationController?.navigationBar.tintColor = K.Colors.goldenThemeColorInverse
 		navigationController?.makeTransparent()
 	}
 	

@@ -29,7 +29,7 @@ struct Service {
 	var assignedStaff: [String] = []
 	
 	
-	init(enabled: Bool, category: String, name: String, description: String, defaultPrice: Double, specificPrices: [String : Double], defaultTime: String, specificTimes: [String : String], assignedStaff: [String] = []) {
+	init(enabled: Bool, category: String, name: String, description: String, defaultPrice: Double, specificPrices: [String : Double], defaultTime: String, specificTimes: [String : String], assignedStaff: [String]) {
 		self.enabled = enabled
 		
 		self.category = category
@@ -82,8 +82,14 @@ struct Service {
 
 
 
-extension Service: Equatable {
+extension Service: Equatable, Comparable {
+	
+	static func < (lhs: Service, rhs: Service) -> Bool {
+		return lhs.name.lowercased() < rhs.name.lowercased()
+	}
+	
 	static func == (lhs: Service, rhs: Service) -> Bool {
 		return lhs.enabled == rhs.enabled && lhs.category == rhs.category && lhs.name == rhs.name && lhs.description == rhs.description && lhs.defaultPrice == rhs.defaultPrice && lhs.specificPrices == rhs.specificPrices && lhs.defaultTime == rhs.defaultTime && lhs.specificTimes == rhs.specificTimes && lhs.assignedStaff == rhs.assignedStaff
 	}
+	
 }

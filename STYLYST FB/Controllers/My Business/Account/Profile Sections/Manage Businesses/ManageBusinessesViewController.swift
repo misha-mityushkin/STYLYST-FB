@@ -32,24 +32,32 @@ class ManageBusinessesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+		print("didload")
         
         navigationController?.isNavigationBarHidden = false
         navigationItem.hidesBackButton = false
 		
-		// Doesn't work???
-		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No businesses added yet. Tap the + icon in the top right to add a business")
+		noDataLabel = tableView.addNoDataLabel(withText: "") // Blank label
 		tableView.register(UINib(nibName: K.Nibs.manageBusinessesHeaderCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.manageBusinessesHeaderCellIdentifier)
         tableView.register(UINib(nibName: K.Nibs.manageBusinessesCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.manageBusinessesCellIdentifier)
+		tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = false
         navigationController?.makeTransparent()
+		noDataLabel?.isHidden = true
         getBusinessIDs()
     }
-    
-    
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		// Have to set noDataLabel here for it to get the proper tableview bounds
+		noDataLabel?.removeFromSuperview() // Remove blank label
+		noDataLabel = tableView.addNoDataLabel(withText: "No businesses added yet. Tap the + icon in the top right to add a business")
+		tableView.reloadData()
+	}
     
     func getBusinessIDs() {
         if let user = Auth.auth().currentUser {
@@ -61,10 +69,10 @@ class ManageBusinessesViewController: UIViewController {
                 if let userDocument = userDocument, userDocument.exists, error == nil {
                     if let businessIDs = userDocument.get(K.Firebase.UserFieldNames.businesses) as? [String] {
                         if businessIDs.count > 0 {
-                            self.populateBusinessLocationsArray(businessIDs: businessIDs)
+							self.populateBusinessLocationsArray(businessIDs: businessIDs)
                         } else {
-                            self.noDataLabel!.isHidden = false
                             self.spinnerView.remove()
+							self.tableView.reloadData()
                         }
                     } else {
                         self.spinnerView.remove()
@@ -111,8 +119,8 @@ class ManageBusinessesViewController: UIViewController {
                             Alerts.showNoOptionAlert(title: "Error loading images", message: "We were unable to load the images associated with \"\(name)\". Please make sure you have a stable internet connection and try again. Error description: \(error.localizedDescription)", sender: self)
 							self.businessLocations.append(BusinessLocation(docID: id, data: businessDocument.data(), images: images, placeholderImage: placeholderImage!))
                             if self.businessLocations.count >= businessIDs.count {
-                                self.tableView.reloadData()
                                 self.spinnerView.remove()
+								self.tableView.reloadData()
                             }
                         } else {
                             for i in 0..<result.items.count {
@@ -149,8 +157,8 @@ class ManageBusinessesViewController: UIViewController {
 										self.tableView.reloadData()
                                     }
                                     if self.businessLocations.count >= businessIDs.count {
-                                        self.tableView.reloadData()
                                         self.spinnerView.remove()
+										self.tableView.reloadData()
                                     }
                                     
                                 }
@@ -222,14 +230,10 @@ class ManageBusinessesViewController: UIViewController {
 extension ManageBusinessesViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        if businessLocations.count == 0 {
-            tableView.backgroundView = noDataLabel
-            tableView.separatorStyle = .none
-        } else {
-            tableView.backgroundView = nil
-        }
-        
+		print("NUMBER OF SECTIONS")
+		if !spinnerView.isActive {
+			tableView.showHideNoDataLabel(noDataLabel: noDataLabel!, show: businessLocations.count == 0)
+		}
         return 1
     }
     

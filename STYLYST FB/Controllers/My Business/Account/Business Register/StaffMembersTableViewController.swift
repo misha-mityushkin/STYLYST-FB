@@ -21,11 +21,12 @@ class StaffMembersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		updateStaff()
-		
-		noDataLabel = Helpers.getNoDataLabel(forTableView: tableView, withText: "No staff members added yet. Tap the + icon in the top right corner to add a staff member")
-		tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
+		tableView.backgroundView = UIImageView(image: K.Images.backgroundNoLogo)
+		noDataLabel = addNoDataLabel(withText: "No staff members added yet. Tap the + icon in the top right corner to add a staff member")
 		tableView.register(UINib(nibName: K.Nibs.staffMembersCellNibName, bundle: nil), forCellReuseIdentifier: K.Identifiers.staffMembersCellIdentifier)
+		tableView.tableFooterView = UIView()
+		
+		updateStaff()
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -54,9 +55,7 @@ class StaffMembersTableViewController: UITableViewController {
 	}
 	
 	func updateStaff() {
-		staffMembers?.sort(by: { user1, user2 in
-			return user1.firstName < user2.firstName
-		})
+		staffMembers?.sort()
 		if let staffMembers = staffMembers {
 			businessRegisterVC?.staffMembers = staffMembers
 			tableView.reloadData()
@@ -67,16 +66,7 @@ class StaffMembersTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-		if staffMembers?.count == 0 {
-			if let noDataLabel = noDataLabel {
-				noDataLabel.isHidden = false
-				tableView.backgroundView?.addSubview(noDataLabel)
-			}
-			tableView.separatorStyle = .none
-		} else {
-			tableView.separatorStyle = .singleLine
-			tableView.backgroundView = UIImageView(image: UIImage(named: K.ImageNames.backgroundNoLogo))
-		}
+		showHideNoDataLabel(noDataLabel: noDataLabel!, show: staffMembers?.count ?? 0 == 0)
 		return 1
     }
 

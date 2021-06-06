@@ -159,15 +159,25 @@ struct Helpers {
 	}
 	
 	
-	static func getNoDataLabel(forTableView tableView: UITableView, withText labelText: String) -> UILabel {
-		let tableWidth = tableView.bounds.size.width
-		let noDataLabel = UILabel(frame: CGRect(x: tableWidth * 0.075, y: 0, width: tableWidth * 0.85, height: tableView.bounds.size.height))
+	static func getNoDataLabel(withText labelText: String, width: CGFloat, height: CGFloat) -> UILabel {
+		//print("tableView width: \(width), height: \(height)")
+		let noDataLabel = UILabel(frame: CGRect(x: width * 0.075, y: 0, width: width * 0.85, height: height))
 		noDataLabel.numberOfLines = 0
 		noDataLabel.text = labelText
+		noDataLabel.font = UIFont(name: K.FontNames.glacialIndifferenceRegular, size: 22)
 		noDataLabel.textColor = K.Colors.goldenThemeColorDefault
 		noDataLabel.textAlignment = .center
 		noDataLabel.isHidden = true
 		return noDataLabel
+	}
+	
+	
+	static func parseServicesArray(servicesData: [[String : Any]]) -> [Service] {
+		var services: [Service] = []
+		for serviceData in servicesData {
+			services.append(Service(serviceData: serviceData))
+		}
+		return services
 	}
 	
 }

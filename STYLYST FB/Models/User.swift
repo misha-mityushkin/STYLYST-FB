@@ -26,3 +26,16 @@ struct User {
 		personalCode = data?[K.Firebase.UserFieldNames.personalCode] as? String ?? "0000"
 	}
 }
+
+
+extension User: Equatable, Comparable {
+	
+	static func < (lhs: User, rhs: User) -> Bool {
+		return lhs.firstName.lowercased() < rhs.firstName.lowercased()
+	}
+	
+	static func == (lhs: User, rhs: User) -> Bool {
+		return lhs.userID == rhs.userID
+	}
+	
+}
